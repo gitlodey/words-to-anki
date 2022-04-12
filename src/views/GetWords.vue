@@ -4,9 +4,7 @@
     <button @click="handleInputSearch(state.word)">
       Find meaning for word
     </button>
-    <textarea name="" id="" cols="30" rows="10" v-model="state.newWordsList" @input="handleTextareaSearch"></textarea>
-
-
+    <textarea v-if="false" name="" id="" cols="30" rows="10" v-model="state.newWordsList" @input="handleTextareaSearch"></textarea>
 
     <ul>
       <li v-for="item in state.wordWithMeanings" :key="item.word">
@@ -34,13 +32,22 @@
 <script setup lang="ts">
   import { reactive } from "vue";
   import Dictionaryapi from "@/services/dictionaryapi";
-  import type { DictonaryApiResponse } from "@/services/dictionaryapi";
+  import LocalJsonApi from "@/services/localJsonApi";
+  import type {
+    DictonaryApiResponse,
+    DictonaryApiDefinition,
+  } from "@/services/dictionaryapi";
+  import type { LocalJsonWord } from "@/services/localJsonApi";
+  import AnkiConnectApi from "@/services/anki-connect-api";
+  import type { Audio } from "@/services/anki-connect-api";
 
   type GetWords = {
     words: string[],
     newWordsList: string,
     word: string,
     wordWithMeanings: WordWithMeaningsType[],
+    localWords: LocalJsonWord[],
+    total: string,
   }
 
   type WordWithMeaningsType = {
@@ -53,6 +60,8 @@
     newWordsList: '',
     word: '',
     wordWithMeanings: [],
+    localWords: [],
+    total: '',
   });
 
   const handleTextareaSearch = async (e: InputEvent) => {
@@ -60,8 +69,62 @@
     await addNewWords(words);
   }
 
+  const serializeLocalJsonToDictonaryApi = (meaning: LocalJsonWord | undefined): DictonaryApiDefinition[] =>{
+
+    if (!meaning) {
+      return [];
+    }
+
+    let result: DictonaryApiDefinition[] = []
+
+    if (meaning.longDefinition) {
+      result.push({
+        definition: meaning.longDefinition,
+        example: '',
+        synonyms: [],
+        antonyms: [],
+      })
+    }
+    if (meaning.shortDefinition) {
+      result.push({
+        definition: meaning.shortDefinition,
+        example: '',
+        synonyms: [],
+        antonyms: [],
+      })
+    }
+    if (meaning.secondDefinitions.length) {
+      meaning.secondDefinitions.map(item => {
+        result.push({
+          definition: item.definition,
+          example: '',
+          synonyms: [],
+          antonyms: [],
+        })
+      })
+    }
+
+    return result;
+  }
+
   const handleInputSearch = async (word: string) => {
-    await addNewWords([word]);
+
+    const preparedWord = word.trim().toLowerCase();
+
+    const meaningFromDictonaryApi = await findMeaning(preparedWord) as DictonaryApiResponse;
+    const meaningFromLocalJson = await findMeaningInLocalJson(preparedWord) as LocalJsonWord;
+    const serializedDefinitions = serializeLocalJsonToDictonaryApi(meaningFromLocalJson);
+
+    meaningFromDictonaryApi.meanings.push({
+      definitions: serializedDefinitions,
+      antonyms: [],
+      synonyms: [],
+      partOfSpeech: '',
+    })
+
+    const definitionFormattedForAnki = formatDefinitionsForAnki(meaningFromDictonaryApi);
+
+    await addNewWord(meaningFromDictonaryApi, definitionFormattedForAnki);
   }
 
   const getWordsFromTextarea = (e: InputEvent): string[] => {
@@ -70,22 +133,74 @@
     return newWords || [];
   };
 
+  const formatDefinitionsForAnki = (meaning: DictonaryApiResponse): string => {
+    let totalDefinition = "";
+
+    totalDefinition += `<h1>${meaning.word}</h1>`
+
+    meaning.phonetics.map((phonetic, index, array) => {
+      if (phonetic.text) {
+        totalDefinition += `<i>${phonetic.text}</i><br/>`
+      }
+
+      if (index > 0 && array.length === index) {
+        totalDefinition += `<br/>`
+      }
+    })
+
+    meaning.meanings.map(item => {
+      item.definitions.map(definition => {
+        totalDefinition += `<b>Definition:</b> <span>${definition.definition}</span>`
+        if (definition.example) {
+          totalDefinition += `<br/><b>Example:</b> <span>${definition.example}</span><br/><br/>`
+        } else {
+          totalDefinition += `<br/><br/>`
+        }
+      })
+    })
+
+    return totalDefinition;
+  };
+
+  const addNewWord = async (meaning: DictonaryApiResponse, formattedDefinition: string) => {
+    let audioUrl = '';
+
+    meaning.phonetics.map(item => {
+      if (item.audio) {
+        audioUrl = item.audio
+      }
+    })
+
+    const audio: Audio | undefined = audioUrl ? {
+      url: audioUrl,
+      filename: audioUrl.split('/').pop() || '',
+      fields: [
+        'Front'
+      ]
+    } : undefined;
+
+    await AnkiConnectApi.addWord({
+      word: meaning.word,
+      shortDefinition: formattedDefinition,
+    }, audio);
+
+    state.wordWithMeanings.push({
+      word: meaning.word,
+      meaning,
+    })
+  }
+
   const addNewWords = async (words: string[]) => {
     words.map(async word => {
       const preparedWord = word.trim().toLowerCase();
       const meaning = await findMeaning(preparedWord) as DictonaryApiResponse;
-      if (preparedWord.length) {
-
-        state.wordWithMeanings.push({
-          word,
-          meaning,
-        })
-      }
+      //addNewWord()
     })
 
     state.newWordsList = ''
   }
 
   const findMeaning = async (word: string) => await Dictionaryapi.getMeaning(word);
+  const findMeaningInLocalJson = async (word: string) => await LocalJsonApi.getMeaning(word);
 
 </script>
