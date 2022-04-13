@@ -115,7 +115,7 @@
     const meaningFromLocalJson = await findMeaningInLocalJson(preparedWord) as LocalJsonWord;
     const serializedDefinitions = serializeLocalJsonToDictonaryApi(meaningFromLocalJson);
 
-    meaningFromDictonaryApi.meanings.push({
+    meaningFromDictonaryApi.meanings.unshift({
       definitions: serializedDefinitions,
       antonyms: [],
       synonyms: [],
