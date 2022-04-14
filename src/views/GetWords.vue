@@ -6,26 +6,9 @@
     </button>
     <textarea v-if="false" name="" id="" cols="30" rows="10" v-model="state.newWordsList" @input="handleTextareaSearch"></textarea>
 
-    <ul>
-      <li v-for="item in state.wordWithMeanings" :key="item.word">
-        <p>
-          {{item.word}}
-          <template v-for="phonetic in item.meaning.phonetics" :key="phonetic.text">
-            <audio v-if="phonetic.audio" controls :src="phonetic.audio">Play</audio>
-          </template>
-        </p>
-        <div v-for="wordMeaning in item.meaning.meanings" :key="wordMeaning.partOfSpeech">
-          <b>{{wordMeaning.partOfSpeech}}</b>
-          <p v-for="definition in wordMeaning.definitions" :key="definition.definition">
-            Definition: {{definition.definition}}
-            <br>
-            <span v-if="definition.example">
-              Example: {{definition.example}}
-            </span>
-          </p>
-        </div>
-      </li>
-    </ul>
+    <div>
+      <word-card v-for="item in state.wordWithMeanings" :key="item.word" :card="item"/>
+    </div>
   </div>
 </template>
 
@@ -40,6 +23,7 @@
   import type { LocalJsonWord } from "@/services/localJsonApi";
   import AnkiConnectApi from "@/services/anki-connect-api";
   import type { Audio } from "@/services/anki-connect-api";
+  import WordCard from "@/components/WordCard.vue";
 
   type GetWords = {
     words: string[],
@@ -50,7 +34,7 @@
     total: string,
   }
 
-  type WordWithMeaningsType = {
+  export type WordWithMeaningsType = {
     word: string,
     meaning: DictonaryApiResponse,
   }
