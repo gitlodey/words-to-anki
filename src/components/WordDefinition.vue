@@ -1,6 +1,7 @@
 <template>
   <div>
-    <input type="checkbox" :checked="definition.include">
+    {{definition.include}}
+    <input type="checkbox" :checked="definition.include" @click="$emit('toggleInclude', !definition.include)">
     Definition ({{definition.partOfSpeech}}): {{definition.definition}}
     <br>
     <span v-if="definition.example">
@@ -15,6 +16,12 @@ import type {DefinitionWithPartOfSpeech} from "@/components/WordCard.vue";
 defineProps<{
   definition: DefinitionWithPartOfSpeech,
 }>()
+
+defineEmits<{
+  (e: 'toggleInclude', includeState: boolean ): void;
+}>()
+
+
 </script>
 
 <style scoped>
