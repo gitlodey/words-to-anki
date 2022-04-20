@@ -34,7 +34,7 @@ import {computed, reactive, ref} from "vue";
 import Dictionaryapi from "@/services/dictionaryapi";
 import type { DictonaryApiResponse } from "@/services/dictionaryapi";
 import type {WordWithMeaningsType} from "@/views/GetWords.vue";
-import WordCard from "@/components/WordCard.vue";
+import WordCard from "@/components/word-card/WordCard.vue";
 import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
 
 enum InputTypes {

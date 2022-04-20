@@ -1,7 +1,13 @@
 <template>
   <div class="word-card">
     {{card.word}}
-     <word-meta :phonetic="phonetic" :phonetics="card.meaning.phonetics" :antonyms="antonyms" :synonyms="synonyms" :part-of-speech="partOfSpeech"/>
+     <word-meta
+         :phonetic="wordMeta.phonetic"
+         :phonetics="wordMeta.phonetics"
+         :antonyms="wordMeta.antonyms"
+         :synonyms="wordMeta.synonyms"
+         :part-of-speech="wordMeta.partOfSpeech"
+     />
     <word-definition
         v-for="definition in state.newDefinitions"
         :key="definition.definition"
@@ -23,9 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive, ref} from "vue";
-import type {WordWithMeaningsType} from "@/views/GetWords.vue";
-import type {DictonaryApiDefinition} from "@/services/dictionaryapi";
+import { computed, reactive, ref } from "vue";
+import type { WordWithMeaningsType } from "@/views/GetWords.vue";
+import type { DictonaryApiDefinition } from "@/services/dictionaryapi";
+import type IWordMeta from './IWordMeta';
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
 
@@ -42,10 +49,6 @@ const props = defineProps<{
   card: WordWithMeaningsType,
 }>()
 
-const phonetic = computed(() => {
-  return props.card.meaning.phonetic
-})
-
 export interface DefinitionWithPartOfSpeech extends DictonaryApiDefinition {
   partOfSpeech: string,
   include: boolean,
@@ -53,35 +56,36 @@ export interface DefinitionWithPartOfSpeech extends DictonaryApiDefinition {
 
 const definitions = computed(() => {
   return props.card.meaning.meanings.reduce((acc: DefinitionWithPartOfSpeech[], meaning) => {
-    const preparedDefinitions = meaning.definitions.map((d: DictonaryApiDefinition): DefinitionWithPartOfSpeech => {
-      const dd = d as DefinitionWithPartOfSpeech
-      dd.partOfSpeech = meaning.partOfSpeech;
-      dd.include = true;
-      return dd;
+    const preparedDefinitions = meaning.definitions.map((definition): DefinitionWithPartOfSpeech => {
+      return {
+        ...definition,
+        partOfSpeech: meaning.partOfSpeech,
+        include: true,
+      };
     })
     acc.push(...preparedDefinitions)
     return acc
   }, [])
 })
 
-const synonyms = computed(() => {
-  return props.card.meaning.meanings
-      .map(meaning => {
-        return meaning.synonyms
-      }).flat().join(', ')
+const wordMeta = computed<IWordMeta>(() => {
+  return props.card.meaning.meanings.reduce((acc: IWordMeta, meaning) => {
+    acc.synonyms.push(...meaning.synonyms)
+    acc.antonyms.push(...meaning.antonyms)
+    acc.partOfSpeech.push(meaning.partOfSpeech)
+
+    return acc
+  }, {
+    phonetic: props.card.meaning.phonetic,
+    phonetics: props.card.meaning.phonetics,
+    synonyms: [],
+    antonyms: [],
+    partOfSpeech: [],
+  })
 })
 
-const antonyms = computed(() => {
-  return props.card.meaning.meanings
-      .map(meaning => {
-        return meaning.antonyms
-      }).flat().join(', ')
-})
-
-const partOfSpeech = computed(() => props.card.meaning.meanings.map(meaning => meaning.partOfSpeech).join(', '))
-
-const toggleInclude = (event, definition) => {
-  definition.include = event
+const toggleInclude = (include: boolean, definition: DefinitionWithPartOfSpeech) => {
+  definition.include = include
 }
 
 const addDefinition = () => {

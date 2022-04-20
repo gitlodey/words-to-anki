@@ -23,7 +23,7 @@
   import type { LocalJsonWord } from "@/services/localJsonApi";
   import AnkiConnectApi from "@/services/anki-connect-api";
   import type { Audio } from "@/services/anki-connect-api";
-  import WordCard from "@/components/WordCard.vue";
+  import WordCard from "@/components/word-card/WordCard.vue";
 
   type GetWords = {
     words: string[],

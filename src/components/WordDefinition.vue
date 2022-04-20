@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{definition.include}}
     <input type="checkbox" :checked="definition.include" @click="$emit('toggleInclude', !definition.include)">
     Definition ({{definition.partOfSpeech}}): {{definition.definition}}
     <br>
@@ -11,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type {DefinitionWithPartOfSpeech} from "@/components/WordCard.vue";
+import type {DefinitionWithPartOfSpeech} from "@/components/word-card/WordCard.vue";
 
 defineProps<{
   definition: DefinitionWithPartOfSpeech,
