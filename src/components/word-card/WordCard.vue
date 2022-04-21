@@ -9,13 +9,7 @@
          :part-of-speech="wordMeta.partOfSpeech"
      />
     <word-definition
-        v-for="definition in state.newDefinitions"
-        :key="definition.definition"
-        :definition="definition"
-        @toggleInclude="toggleInclude($event, definition)"
-    />
-    <word-definition
-        v-for="definition in definitions"
+        v-for="definition in sortedDefinitions"
         :key="definition.definition"
         :definition="definition"
         @toggleInclude="toggleInclude($event, definition)"
@@ -46,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import type { WordWithMeaningsType } from "@/views/GetWords.vue";
 import type DefinitionWithPartOfSpeech from './DefinitionWithPartOfSpeech'
 import type IWordMeta from './IWordMeta';
@@ -62,9 +56,11 @@ const props = defineProps<{
 
 //data
 const state = reactive<{
+  definitions: DefinitionWithPartOfSpeech[],
   newDefinitions: DefinitionWithPartOfSpeech[],
   addDefinitionEnabled: boolean,
 }>({
+  definitions: [],
   newDefinitions: [],
   addDefinitionEnabled: false,
 })
@@ -73,19 +69,37 @@ let newDefinition = ref('')
 let newExample = ref('')
 let newPartOfSpeech = ref<PartOfSpeech>('')
 
+watch(
+    props.card,
+    (newCard) => {
+      const clonedCard: WordWithMeaningsType = JSON.parse(JSON.stringify(newCard));
+      state.definitions = clonedCard.meaning.meanings.reduce((acc: DefinitionWithPartOfSpeech[], meaning) => {
+        const preparedDefinitions = meaning.definitions.map((definition): DefinitionWithPartOfSpeech => {
+          return {
+            ...definition,
+            partOfSpeech: meaning.partOfSpeech,
+            include: true,
+          };
+        })
+        acc.push(...preparedDefinitions)
+        return acc
+      }, [])
+    },
+    {
+      deep: true,
+      immediate: true,
+    }
+)
+
 //computed
-const definitions = computed(() => {
-  return props.card.meaning.meanings.reduce((acc: DefinitionWithPartOfSpeech[], meaning) => {
-    const preparedDefinitions = meaning.definitions.map((definition): DefinitionWithPartOfSpeech => {
-      return {
-        ...definition,
-        partOfSpeech: meaning.partOfSpeech,
-        include: true,
-      };
-    })
-    acc.push(...preparedDefinitions)
-    return acc
-  }, [])
+const sortedDefinitions = computed(() => {
+  const clonedDefinitions = [...state.newDefinitions, ...state.definitions]
+  return clonedDefinitions.sort((defA, defB) => {
+
+    if (defA.include === true && defB.include === false) return -1
+    if (defA.include === false && defB.include === true) return 1
+    return 0
+  })
 })
 const wordMeta = computed<IWordMeta>(() => {
   return props.card.meaning.meanings.reduce((acc: IWordMeta, meaning) => {
