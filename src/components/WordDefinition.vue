@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import type {DefinitionWithPartOfSpeech} from "@/components/word-card/WordCard.vue";
+import type DefinitionWithPartOfSpeech from "./word-card/DefinitionWithPartOfSpeech";
 
 defineProps<{
   definition: DefinitionWithPartOfSpeech,

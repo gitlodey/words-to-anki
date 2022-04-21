@@ -31,11 +31,17 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from "vue";
 import type { WordWithMeaningsType } from "@/views/GetWords.vue";
-import type { DictonaryApiDefinition } from "@/services/dictionaryapi";
+import type DefinitionWithPartOfSpeech from './DefinitionWithPartOfSpeech'
 import type IWordMeta from './IWordMeta';
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
 
+//props
+const props = defineProps<{
+  card: WordWithMeaningsType,
+}>()
+
+//data
 const state = reactive<{
   newDefinitions: DefinitionWithPartOfSpeech[],
 }>({
@@ -45,15 +51,7 @@ const state = reactive<{
 let newDefinition = ref('')
 let newExample = ref('')
 
-const props = defineProps<{
-  card: WordWithMeaningsType,
-}>()
-
-export interface DefinitionWithPartOfSpeech extends DictonaryApiDefinition {
-  partOfSpeech: string,
-  include: boolean,
-}
-
+//computed
 const definitions = computed(() => {
   return props.card.meaning.meanings.reduce((acc: DefinitionWithPartOfSpeech[], meaning) => {
     const preparedDefinitions = meaning.definitions.map((definition): DefinitionWithPartOfSpeech => {
@@ -67,7 +65,6 @@ const definitions = computed(() => {
     return acc
   }, [])
 })
-
 const wordMeta = computed<IWordMeta>(() => {
   return props.card.meaning.meanings.reduce((acc: IWordMeta, meaning) => {
     acc.synonyms.push(...meaning.synonyms)
@@ -84,10 +81,10 @@ const wordMeta = computed<IWordMeta>(() => {
   })
 })
 
+//methods
 const toggleInclude = (include: boolean, definition: DefinitionWithPartOfSpeech) => {
   definition.include = include
 }
-
 const addDefinition = () => {
   state.newDefinitions.push({
     definition: newDefinition.value,
