@@ -21,10 +21,27 @@
         @toggleInclude="toggleInclude($event, definition)"
     />
 
-    <button @click="addDefinition">add definition</button>
+    <button
+        v-if="state.addDefinitionEnabled === false"
+        @click="addDefinitionFormToggle"
+    >
+      add your definition
+    </button>
 
-    <input type="text" v-model="newDefinition">
-    <input type="text" v-model="newExample">
+    <div
+        class="new-definition-form"
+        v-if="state.addDefinitionEnabled"
+    >
+      <input type="text" v-model="newDefinition">
+      <input type="text" v-model="newExample">
+      <select v-model="newPartOfSpeech">
+        <option value=""></option>
+        <option v-for="item in PartOfSpeechList" :key="item">{{item}}</option>
+      </select>
+
+      <button @click="addDefinition">add</button>
+      <button @click="cancelNewDefinition">cancel</button>
+    </div>
   </div>
 </template>
 
@@ -35,6 +52,8 @@ import type DefinitionWithPartOfSpeech from './DefinitionWithPartOfSpeech'
 import type IWordMeta from './IWordMeta';
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
+import type PartOfSpeech from './PartOfSpeechList';
+import { PartOfSpeechList } from './PartOfSpeechList';
 
 //props
 const props = defineProps<{
@@ -44,12 +63,15 @@ const props = defineProps<{
 //data
 const state = reactive<{
   newDefinitions: DefinitionWithPartOfSpeech[],
+  addDefinitionEnabled: boolean,
 }>({
   newDefinitions: [],
+  addDefinitionEnabled: false,
 })
 
 let newDefinition = ref('')
 let newExample = ref('')
+let newPartOfSpeech = ref<PartOfSpeech>('')
 
 //computed
 const definitions = computed(() => {
@@ -89,7 +111,7 @@ const addDefinition = () => {
   state.newDefinitions.push({
     definition: newDefinition.value,
     example: newExample.value,
-    partOfSpeech: '',
+    partOfSpeech: newPartOfSpeech.value,
     include: true,
     synonyms: [],
     antonyms: [],
@@ -98,6 +120,13 @@ const addDefinition = () => {
   newDefinition.value = '';
   newExample.value = '';
 }
+const cancelNewDefinition = () => {
+  newDefinition.value = ''
+  newExample.value = ''
+  newPartOfSpeech.value = ''
+  addDefinitionFormToggle()
+}
+const addDefinitionFormToggle = () => state.addDefinitionEnabled = !state.addDefinitionEnabled
 </script>
 
 <style scoped>

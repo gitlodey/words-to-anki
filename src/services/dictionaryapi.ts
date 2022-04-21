@@ -1,3 +1,5 @@
+import type PartOfSpeech from "@/components/word-card/PartOfSpeechList";
+
 export type License = {
     name: string,
     url: string,
@@ -11,7 +13,7 @@ export type DictonaryApiPhonetic = {
 }
 
 export type DictonaryApiMeaning = {
-    partOfSpeech: string,
+    partOfSpeech: PartOfSpeech,
     definitions: DictonaryApiDefinition[],
     synonyms: string[],
     antonyms: string[],
