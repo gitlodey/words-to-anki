@@ -48,6 +48,7 @@ import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
 import type PartOfSpeech from './PartOfSpeechList';
 import { PartOfSpeechList } from './PartOfSpeechList';
+import type WordCardComponentRef from './WordCardComponentRef';
 
 //props
 const props = defineProps<{
@@ -141,6 +142,13 @@ const cancelNewDefinition = () => {
   addDefinitionFormToggle()
 }
 const addDefinitionFormToggle = () => state.addDefinitionEnabled = !state.addDefinitionEnabled
+const formatDefinitionsForAnki = (): string => {
+  return props.card.word;
+};
+
+defineExpose<WordCardComponentRef>({
+  formatDefinitionsForAnki,
+})
 </script>
 
 <style scoped>

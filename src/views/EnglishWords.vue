@@ -24,7 +24,16 @@
     />
 
     <h2 v-if="words.length > 1">Words list</h2>
-    <word-card v-for="item in words" :key="item.word" :card="item"/>
+    <template v-if="words">
+      <word-card
+          v-for="item in words"
+          :ref="addWordCardRef"
+          :key="item.word"
+          :card="item"
+      />
+    </template>
+
+    <button @click="saveWordsToAnki">try</button>
   </div>
 </template>
 
@@ -36,6 +45,7 @@ import type { DictonaryApiResponse } from "@/services/dictionaryapi";
 import type {WordWithMeaningsType} from "@/views/GetWords.vue";
 import WordCard from "@/components/word-card/WordCard.vue";
 import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
+import type WordCardComponentRef from '@/components/word-card/WordCardComponentRef';
 
 enum InputTypes {
   one =  'one',
@@ -43,6 +53,7 @@ enum InputTypes {
 }
 
 //data
+const wordCardInstances = ref<WordCardComponentRef[] | null>([])
 let selectedInputType = ref<InputTypes>(InputTypes.one)
 let words = reactive<WordWithMeaningsType[]>([])
 
@@ -71,4 +82,17 @@ const addNewWord = (meaning: DictonaryApiResponse) => {
   })
 }
 const findMeaning = async (word: string) => await Dictionaryapi.getMeaning(word);
+const saveWordsToAnki = () => {
+  wordCardInstances?.value?.forEach(wordCard => {
+    console.log(wordCard.formatDefinitionsForAnki())
+  })
+}
+
+function addWordCardRef(el: WordCardComponentRef) {
+  if ('formatDefinitionsForAnki' in el) {
+    if (wordCardInstances?.value?.includes(el) === false) {
+      wordCardInstances.value.push(el)
+    }
+  }
+}
 </script>
