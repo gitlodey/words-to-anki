@@ -143,7 +143,39 @@ const cancelNewDefinition = () => {
 }
 const addDefinitionFormToggle = () => state.addDefinitionEnabled = !state.addDefinitionEnabled
 const formatDefinitionsForAnki = (): string => {
-  return props.card.word;
+  let totalDefinition = '';
+
+  totalDefinition += `<h1>${props.card.word}</h1>`
+  props.card.meaning.phonetics.map((phonetic, index, array) => {
+    if (phonetic.text) {
+      totalDefinition += `<i>${phonetic.text}</i><br/>`
+    }
+
+    if (index > 0 && array.length === index) {
+      totalDefinition += `<br/>`
+    }
+  })
+  if (wordMeta.value.partOfSpeech.length > 0) {
+    totalDefinition += `Part of speech: <p>${wordMeta.value.partOfSpeech.join(', ')}</p>`
+  }
+  if (wordMeta.value.synonyms.length > 0) {
+    totalDefinition += `Synonims: <p>${wordMeta.value.synonyms.join(', ')}</p>`
+  }
+  if (wordMeta.value.antonyms.length > 0) {
+    totalDefinition += `Antonyms: <p>${wordMeta.value.antonyms.join(', ')}</p>`
+  }
+  sortedDefinitions.value.map(definition => {
+    if (definition.include) {
+      totalDefinition += `<b>Definition${definition.partOfSpeech ? ' ('+definition.partOfSpeech+')' : ''}:</b> <span>${definition.definition}</span>`
+      if (definition.example) {
+        totalDefinition += `<br/><b>Example:</b> <span>${definition.example}</span><br/><br/>`
+      } else {
+        totalDefinition += `<br/><br/>`
+      }
+    }
+  })
+
+  return totalDefinition;
 };
 
 defineExpose<WordCardComponentRef>({

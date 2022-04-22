@@ -89,7 +89,7 @@ const saveWordsToAnki = () => {
 }
 
 function addWordCardRef(el: WordCardComponentRef) {
-  if ('formatDefinitionsForAnki' in el) {
+  if (el && 'formatDefinitionsForAnki' in el) {
     if (wordCardInstances?.value?.includes(el) === false) {
       wordCardInstances.value.push(el)
     }
