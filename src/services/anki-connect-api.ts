@@ -25,7 +25,17 @@ class AnkiConnectApi {
         return json;
     }
 
-    async addWord (word: WordWithShortDefinition, audio?: Audio) {
+    async addWord (word: WordWithShortDefinition, audioUrl?: string | undefined) {
+        let audio: Audio | undefined;
+        if (audioUrl) {
+            audio = {
+                url: audioUrl,
+                filename: audioUrl.split('/').pop() || '',
+                "fields": [
+                    "Front"
+                ],
+            }
+        }
         await this.invoke('addNote', 6, { note: {
                 deckName: "English 2022",
                 modelName: "Basic",

@@ -72,6 +72,7 @@ import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
 import type WordCardComponentRef from '@/components/word-card/WordCardComponentRef';
 import ExpansionPanelList from "@/components/expansion-panel/ExpansionPanelList.vue";
 import ExpansionPanel from '@/components/expansion-panel/ExpansionPanel.vue';
+import ankiConnectApi from "@/services/anki-connect-api";
 
 enum InputTypes {
   one =  'one',
@@ -113,7 +114,12 @@ const addNewWord = (meaning: DictonaryApiResponse) => {
 const findMeaning = async (word: string) => await Dictionaryapi.getMeaning(word);
 const saveWordsToAnki = () => {
   wordCardInstances?.value?.forEach(wordCard => {
-    console.log(wordCard.formatDefinitionsForAnki())
+    ankiConnectApi.addWord({
+      word: wordCard.wordStr,
+      shortDefinition: wordCard.formatDefinitionsForAnki(),
+    }, wordCard.getAudioForAnki())
+    //console.log(wordCard.formatDefinitionsForAnki())
+    //console.log(wordCard.getAudioForAnki())
   })
 }
 

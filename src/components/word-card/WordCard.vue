@@ -117,6 +117,8 @@ const wordMeta = computed<IWordMeta>(() => {
     partOfSpeech: [],
   })
 })
+const audioUrl = computed(() : string | undefined => props.card.meaning?.phonetics.find(item => item.audio)?.audio)
+const wordStr = computed(() => props.card.word)
 
 //methods
 const toggleInclude = (include: boolean, definition: DefinitionWithPartOfSpeech) => {
@@ -177,9 +179,12 @@ const formatDefinitionsForAnki = (): string => {
 
   return totalDefinition;
 };
+const getAudioForAnki = (): string | undefined => audioUrl.value
 
 defineExpose<WordCardComponentRef>({
   formatDefinitionsForAnki,
+  getAudioForAnki,
+  wordStr: wordStr.value,
 })
 </script>
 
