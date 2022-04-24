@@ -1,8 +1,7 @@
 <template>
   <div class="expansion-panel">
-    <div class="expansion-panel--head">
+    <div class="expansion-panel--head" @click="toggle">
       <slot name="head"></slot>
-      <button @click="toggle">toggle</button>
     </div>
     <div class="expansion-panel--body">
       <transition
@@ -50,6 +49,12 @@ const hide = (element: HTMLElement) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.expansion-panel--head {
+  cursor: pointer;
 
+  &:hover {
+    background-color: #e5e5e5;
+  }
+}
 </style>

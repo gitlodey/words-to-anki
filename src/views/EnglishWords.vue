@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Add new English Words to your Anki</h1>
-    <button @click="globalToggle">globalToggle</button>
+    <button @click="globalToggle">{{globalToggleText}}</button>
 
     
     <div class="input-selector">
@@ -96,6 +96,7 @@ let isSingleWordFormShow = computed(() => {
       return false;
   }
 })
+let globalToggleText = computed(() => allPanelsOpen.value ? 'Close all' : 'Open all')
 
 //methods
 const handleAddWordsForm = async (word: string) => {
