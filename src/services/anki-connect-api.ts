@@ -11,6 +11,16 @@ export interface Audio {
     ]
 }
 
+export interface Image {
+    url?: string,
+    data?: string,
+    path?: string,
+    filename: string,
+    fields?: [
+        "Back"
+    ]
+}
+
 class AnkiConnectApi {
     async invoke (action: string, version: number, params={}) {
         const response = await fetch('http://127.0.0.1:8765', {
@@ -25,8 +35,13 @@ class AnkiConnectApi {
         return json;
     }
 
-    async addWord (word: WordWithShortDefinition, audioUrl?: string | undefined) {
+    async addWord (
+        word: WordWithShortDefinition,
+        audioUrl?: string | undefined,
+        imageData?: Image | null,
+        ) {
         let audio: Audio | undefined;
+        let picture: Image | undefined;
         if (audioUrl) {
             audio = {
                 url: audioUrl,
@@ -34,6 +49,15 @@ class AnkiConnectApi {
                 "fields": [
                     "Front"
                 ],
+            }
+        }
+        if (imageData) {
+            picture = {
+                data: imageData.data,
+                filename: imageData.filename,
+                fields: [
+                    "Back"
+                ]
             }
         }
         await this.invoke('addNote', 6, { note: {
@@ -47,6 +71,7 @@ class AnkiConnectApi {
                     allowDuplicate: true,
                 },
                 audio,
+                picture,
             }
         });
     }

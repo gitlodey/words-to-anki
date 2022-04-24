@@ -114,10 +114,14 @@ const addNewWord = (meaning: DictonaryApiResponse) => {
 const findMeaning = async (word: string) => await Dictionaryapi.getMeaning(word);
 const saveWordsToAnki = () => {
   wordCardInstances?.value?.forEach(wordCard => {
+    console.log(wordCard.getImageData())
     ankiConnectApi.addWord({
-      word: wordCard.wordStr,
-      shortDefinition: wordCard.formatDefinitionsForAnki(),
-    }, wordCard.getAudioForAnki())
+        word: wordCard.wordStr,
+        shortDefinition: wordCard.formatDefinitionsForAnki(),
+      },
+        wordCard.getAudioForAnki(),
+        wordCard.getImageData(),
+    )
     //console.log(wordCard.formatDefinitionsForAnki())
     //console.log(wordCard.getAudioForAnki())
   })

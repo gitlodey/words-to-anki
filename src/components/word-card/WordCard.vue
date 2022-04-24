@@ -1,6 +1,8 @@
 <template>
   <div class="word-card">
     {{card.word}}
+    <input type="file" @change="uploadImg">
+    <img v-if="state.image" :src="state.image?.data"/>
      <word-meta
          :phonetic="wordMeta.phonetic"
          :phonetics="wordMeta.phonetics"
@@ -49,6 +51,7 @@ import WordDefinition from "@/components/WordDefinition.vue";
 import type PartOfSpeech from './PartOfSpeechList';
 import { PartOfSpeechList } from './PartOfSpeechList';
 import type WordCardComponentRef from './WordCardComponentRef';
+import type {Image} from "@/services/anki-connect-api";
 
 //props
 const props = defineProps<{
@@ -60,10 +63,12 @@ const state = reactive<{
   definitions: DefinitionWithPartOfSpeech[],
   newDefinitions: DefinitionWithPartOfSpeech[],
   addDefinitionEnabled: boolean,
+  image: Image | null,
 }>({
   definitions: [],
   newDefinitions: [],
   addDefinitionEnabled: false,
+  image: null,
 })
 
 let newDefinition = ref('')
@@ -143,6 +148,23 @@ const cancelNewDefinition = () => {
   newPartOfSpeech.value = ''
   addDefinitionFormToggle()
 }
+const uploadImg = (event: Event) => {
+  const element = event.currentTarget as HTMLInputElement;
+  let fileList: FileList | null = element.files;
+
+  if (fileList) {
+    const reader = new FileReader()
+    reader.onloadend = function () {
+      const result = reader.result as string
+      state.image = {
+        data: result,
+        filename: fileList?.length ? fileList[0].name : ''
+      }
+    }
+
+    reader.readAsDataURL(fileList[0])
+  }
+}
 const addDefinitionFormToggle = () => state.addDefinitionEnabled = !state.addDefinitionEnabled
 const formatDefinitionsForAnki = (): string => {
   let totalDefinition = '';
@@ -180,10 +202,21 @@ const formatDefinitionsForAnki = (): string => {
   return totalDefinition;
 };
 const getAudioForAnki = (): string | undefined => audioUrl.value
+const getImageData = (): Image | null => {
+  if (state.image) {
+    return {
+      data: state.image.data?.replace('data:', '').replace(/^.+,/, ''),
+      filename: state.image.filename,
+    }
+  }
+
+  return null
+}
 
 defineExpose<WordCardComponentRef>({
   formatDefinitionsForAnki,
   getAudioForAnki,
+  getImageData,
   wordStr: wordStr.value,
 })
 </script>
