@@ -1,20 +1,30 @@
 <template>
   <div>
     <h1>Add new English Words to your Anki</h1>
+    <button @click="globalToggle">globalToggle</button>
+
     
     <div class="input-selector">
-      <input
-          type="radio"
-          :value="InputTypes.one"
-          name="type"
-          v-model="selectedInputType"
-      />
-      <input
-          type="radio"
-          :value="InputTypes.list"
-          name="type"
-          v-model="selectedInputType"
-      />
+      <label for="one">
+        <input
+            id="one"
+            type="radio"
+            :value="InputTypes.one"
+            name="type"
+            v-model="selectedInputType"
+        />
+        <span>Word</span>
+      </label>
+      <label for="list">
+        <input
+            id="list"
+            type="radio"
+            :value="InputTypes.list"
+            name="type"
+            v-model="selectedInputType"
+        />
+        <span>Words list</span>
+      </label>
 
     </div>
 
@@ -24,14 +34,28 @@
     />
 
     <h2 v-if="words.length > 1">Words list</h2>
-    <template v-if="words">
-      <word-card
-          v-for="item in words"
-          :ref="addWordCardRef"
-          :key="item.word"
-          :card="item"
-      />
-    </template>
+    <expansion-panel-list
+        :all-panels-open="allPanelsOpen"
+    >
+      <template #panels="{ allPanelsOpen }" >
+        <expansion-panel
+            v-for="word in words"
+            :open="allPanelsOpen"
+            :key="word.word"
+        >
+          <template #head>
+            <b>{{word.word}}: </b>
+            <span>{{word.meaning.meanings[0].definitions[0].definition}}</span>
+          </template>
+          <template #body>
+            <word-card
+                :ref="addWordCardRef"
+                :card="word"
+            />
+          </template>
+        </expansion-panel>
+      </template>
+    </expansion-panel-list>
 
     <button @click="saveWordsToAnki">try</button>
   </div>
@@ -46,6 +70,8 @@ import type {WordWithMeaningsType} from "@/views/GetWords.vue";
 import WordCard from "@/components/word-card/WordCard.vue";
 import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
 import type WordCardComponentRef from '@/components/word-card/WordCardComponentRef';
+import ExpansionPanelList from "@/components/expansion-panel/ExpansionPanelList.vue";
+import ExpansionPanel from '@/components/expansion-panel/ExpansionPanel.vue';
 
 enum InputTypes {
   one =  'one',
@@ -55,7 +81,9 @@ enum InputTypes {
 //data
 const wordCardInstances = ref<WordCardComponentRef[] | null>([])
 let selectedInputType = ref<InputTypes>(InputTypes.one)
+let allPanelsOpen = ref<boolean>(true)
 let words = reactive<WordWithMeaningsType[]>([])
+
 
 //computed
 let isSingleWordFormShow = computed(() => {
@@ -87,6 +115,8 @@ const saveWordsToAnki = () => {
     console.log(wordCard.formatDefinitionsForAnki())
   })
 }
+
+const globalToggle = () => allPanelsOpen.value = !allPanelsOpen.value
 
 function addWordCardRef(el: WordCardComponentRef) {
   if (el && 'formatDefinitionsForAnki' in el) {
