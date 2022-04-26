@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GetWords from '../views/GetWords.vue'
 import EnglishWords from '../views/EnglishWords.vue'
+import TurkishWords from '@/views/TurkishWords.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       name: 'English',
       component: EnglishWords,
     },
+    {
+      path: '/tr',
+      name: 'Turkish',
+      component: TurkishWords,
+    }
   ]
 })
 
