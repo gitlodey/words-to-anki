@@ -34,28 +34,23 @@
     />
 
     <h2 v-if="words.length > 1">Words list</h2>
-    <expansion-panel-list
-        :all-panels-open="allPanelsOpen"
+    <expansion-panel
+        v-for="word in words"
+        :open="allPanelsOpen"
+        :key="word.word"
     >
-      <template #panels="{ allPanelsOpen }" >
-        <expansion-panel
-            v-for="word in words"
-            :open="allPanelsOpen"
-            :key="word.word"
-        >
-          <template #head>
-            <b>{{word.word}}: </b>
-            <span>{{word.meaning.meanings[0].definitions[0].definition}}</span>
-          </template>
-          <template #body>
-            <word-card
-                :ref="addWordCardRef"
-                :card="word"
-            />
-          </template>
-        </expansion-panel>
+      <template #head>
+        <b>{{word.word}}: </b>
+        <span>{{word.meaning.meanings[0].definitions[0].definition}}</span>
       </template>
-    </expansion-panel-list>
+      <template #body>
+        <word-card
+            :ref="addWordCardRef"
+            :card="word"
+        />
+        <pre>{{word.linguaRobotResponse}}</pre>
+      </template>
+    </expansion-panel>
 
     <button @click="saveWordsToAnki">try</button>
   </div>
@@ -70,9 +65,10 @@ import type {WordWithMeaningsType} from "@/views/GetWords.vue";
 import WordCard from "@/components/word-card/WordCard.vue";
 import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
 import type WordCardComponentRef from '@/components/word-card/WordCardComponentRef';
-import ExpansionPanelList from "@/components/expansion-panel/ExpansionPanelList.vue";
 import ExpansionPanel from '@/components/expansion-panel/ExpansionPanel.vue';
 import ankiConnectApi from "@/services/anki-connect-api";
+import LinguaRobotApi from "@/services/linguaRobot/lingua-robot-api";
+import type {LinguaRobotResponse} from "@/services/linguaRobot/lingua-robot-types";
 
 enum InputTypes {
   one =  'one',
@@ -102,16 +98,25 @@ let globalToggleText = computed(() => allPanelsOpen.value ? 'Close all' : 'Open 
 //methods
 const handleAddWordsForm = async (word: string) => {
   const preparedWord = word.trim().toLowerCase();
-  const meaning = await findMeaning(preparedWord) as DictonaryApiResponse;
-  addNewWord(meaning)
+  const { dictionaryApiResponse, linguaRobotResponse } = await findMeaning(preparedWord);
+  addNewWord(dictionaryApiResponse, linguaRobotResponse)
 }
-const addNewWord = (meaning: DictonaryApiResponse) => {
+const addNewWord = (dictionaryApiResponse: DictonaryApiResponse, linguaRobotResponse: LinguaRobotResponse) => {
   words.unshift({
-    word: meaning.word,
-    meaning,
+    word: dictionaryApiResponse.word,
+    meaning: dictionaryApiResponse,
+    linguaRobotResponse: linguaRobotResponse,
   })
 }
-const findMeaning = async (word: string) => await Dictionaryapi.getMeaning(word);
+const findMeaning = async (word: string) => {
+  const dictionaryApiResponse = await Dictionaryapi.getMeaning(word) as DictonaryApiResponse
+  const linguaRobotResponse = await LinguaRobotApi.getWord(word)
+
+  return {
+    dictionaryApiResponse,
+    linguaRobotResponse,
+  }
+};
 const saveWordsToAnki = () => {
   wordCardInstances?.value?.forEach(wordCard => {
     console.log(wordCard.getImageData())
@@ -122,8 +127,6 @@ const saveWordsToAnki = () => {
         wordCard.getAudioForAnki(),
         wordCard.getImageData(),
     )
-    //console.log(wordCard.formatDefinitionsForAnki())
-    //console.log(wordCard.getAudioForAnki())
   })
 }
 

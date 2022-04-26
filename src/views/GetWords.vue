@@ -24,6 +24,7 @@
   import AnkiConnectApi from "@/services/anki-connect-api";
   import type { Audio } from "@/services/anki-connect-api";
   import WordCard from "@/components/word-card/WordCard.vue";
+  import type {LinguaRobotResponse} from "@/services/linguaRobot/lingua-robot-types";
 
   type GetWords = {
     words: string[],
@@ -37,6 +38,7 @@
   export type WordWithMeaningsType = {
     word: string,
     meaning: DictonaryApiResponse,
+    linguaRobotResponse?: LinguaRobotResponse,
   }
 
   let state: GetWords = reactive({
