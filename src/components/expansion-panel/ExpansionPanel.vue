@@ -10,7 +10,7 @@
           @before-leave="hide"
           @leave="show"
       >
-        <section class="expansion-panel--content" v-if="isOpen">
+        <section class="expansion-panel--content" v-show="isOpen">
           <slot name="body"></slot>
         </section>
       </transition>
