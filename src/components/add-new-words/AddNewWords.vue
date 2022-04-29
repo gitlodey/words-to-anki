@@ -1,14 +1,27 @@
 <template>
   <div class="add-words-form">
-    <input
+    <v-text-field
+        class="add-words-form--field"
         v-if="isSingleWordForm"
         v-model="inputData"
+        density="compact"
+        variant="outlined"
         @keydown.enter="handleInput"
-    />
-    <textarea v-else v-model="inputData"></textarea>
-    <button @click="handle">
-      Find meaning for word
-    </button>
+    ></v-text-field>
+    <v-textarea
+        class="add-words-form--field"
+        v-else
+        v-model="inputData"
+        variant="outlined"
+    ></v-textarea>
+    <v-btn
+        height="40"
+        @click="handle"
+        class="add-words-form--btn"
+        color="primary"
+    >
+      Find meaning
+    </v-btn>
   </div>
 </template>
 
@@ -55,3 +68,11 @@ const handleTextarea = () => {
   inputData.value = ''
 }
 </script>
+
+<style lang="scss" scoped>
+.add-words-form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-column-gap: 20px;
+}
+</style>
