@@ -1,11 +1,13 @@
 <template>
   <div class="word-definition">
-    <input
-        class="word-definition--checkbox"
-        type="checkbox"
-        :checked="definition.include"
+    <v-switch
+        :style="{ flex: '0 1 auto' }"
+        color="indigo"
+        :model-value="definition.include"
+        :inline="true"
+        :hide-details="true"
         @click="$emit('toggleInclude', !definition.include)"
-    />
+    ></v-switch>
     <div class="word-definition--content">
       <div>
         Definition

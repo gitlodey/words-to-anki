@@ -1,42 +1,79 @@
 <template>
   <div class="word-card">
-    {{card.word}}
-    <input type="file" @change="uploadImg">
-    <img v-if="state.image" :src="state.image?.data"/>
-     <word-meta
-         :phonetic="wordMeta.phonetic"
-         :phonetics="wordMeta.phonetics"
-         :antonyms="wordMeta.antonyms"
-         :synonyms="wordMeta.synonyms"
-         :part-of-speech="wordMeta.partOfSpeech"
-     />
-    <word-definition
-        v-for="definition in sortedDefinitions"
-        :key="definition.definition"
-        :definition="definition"
-        @toggleInclude="toggleInclude($event, definition)"
-    />
+    <div class="word-card--content">
+      <word-meta
+          :phonetic="wordMeta.phonetic"
+          :phonetics="wordMeta.phonetics"
+          :antonyms="wordMeta.antonyms"
+          :synonyms="wordMeta.synonyms"
+          :part-of-speech="wordMeta.partOfSpeech"
+      />
+      <word-definition
+          v-for="definition in sortedDefinitions"
+          :key="definition.definition"
+          :definition="definition"
+          @toggleInclude="toggleInclude($event, definition)"
+      />
 
-    <button
-        v-if="state.addDefinitionEnabled === false"
-        @click="addDefinitionFormToggle"
-    >
-      add your definition
-    </button>
+      <v-btn
+          v-if="state.addDefinitionEnabled === false"
+          @click="addDefinitionFormToggle"
+      >
+        add your definition
+      </v-btn>
 
-    <div
-        class="new-definition-form"
-        v-if="state.addDefinitionEnabled"
-    >
-      <input type="text" v-model="newDefinition">
-      <input type="text" v-model="newExample">
-      <select v-model="newPartOfSpeech">
-        <option value=""></option>
-        <option v-for="item in PartOfSpeechList" :key="item">{{item}}</option>
-      </select>
+      <div
+          class="new-definition-form"
+          v-if="state.addDefinitionEnabled"
+      >
+        <v-text-field
+            v-model="newDefinition"
+            density="compact"
+            variant="outlined"
+        />
+        <v-text-field
+            v-model="newExample"
+            density="compact"
+            variant="outlined"
+        />
+        <select v-model="newPartOfSpeech">
+          <option value=""></option>
+          <option v-for="item in PartOfSpeechList" :key="item">{{item}}</option>
+        </select>
 
-      <button @click="addDefinition">add</button>
-      <button @click="cancelNewDefinition">cancel</button>
+        <div class="button-container">
+          <v-btn
+              @click="addDefinition"
+              color="success"
+          >
+            add
+          </v-btn>
+          <v-btn
+              @click="cancelNewDefinition"
+              color="error"
+          >
+            cancel
+          </v-btn>
+        </div>
+      </div>
+    </div>
+    <div class="word-card--image" @paste="handlePasteFile">
+      <label class="word-card--image-label" for="image-download">
+        <div class="word-card--image-icon">🖼️</div>
+        <div>drop or paste image here or click on frame</div>
+        <input
+            id="image-download"
+            class="word-card--image-input"
+            type="file"
+            @change="handleFileUpload"
+            @dragover.prevent
+            @drop="handleFileUpload"
+        />
+      </label>
+
+      <div class="word-card--image-container">
+        <img v-if="state.image" :src="state.image?.data"/>
+      </div>
     </div>
   </div>
 </template>
@@ -148,10 +185,16 @@ const cancelNewDefinition = () => {
   newPartOfSpeech.value = ''
   addDefinitionFormToggle()
 }
-const uploadImg = (event: Event) => {
+const handleFileUpload = (event: Event) => {
   const element = event.currentTarget as HTMLInputElement;
-  let fileList: FileList | null = element.files;
-
+  const fileList: FileList | null = element.files;
+  uploadImg(fileList)
+}
+const handlePasteFile = (event: ClipboardEvent) => {
+  let fileList: FileList | null = event?.clipboardData?.files || null;
+  uploadImg(fileList)
+}
+const uploadImg = (fileList: FileList | null) => {
   if (fileList) {
     const reader = new FileReader()
     reader.onloadend = function () {
@@ -221,10 +264,59 @@ defineExpose<WordCardComponentRef>({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .word-card {
-  background-color: #efefef;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-column-gap: 20px;
+
+  &--image {
+    &-label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100px;
+      cursor: pointer;
+      transition: 0.3s ease background-color;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+
+    &-input {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    &-icon {
+      font-size: 50px;
+      padding: 5px;
+    }
+
+    &-container {
+      height: calc(100% - 100px);
+      > img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
+}
+.new-definition-form {
   padding: 20px;
-  margin-bottom: 20px;
+  transition: 0.3s ease background-color;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
 }
 </style>
