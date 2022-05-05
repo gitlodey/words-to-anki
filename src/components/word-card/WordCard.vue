@@ -1,6 +1,15 @@
 <template>
   <div class="word-card">
     <div class="word-card--content">
+      <v-btn
+          v-for="lemma in normalizedLemmas"
+          :key="lemma"
+          @click="findForLemma(lemma)"
+          size="small"
+          color="primary"
+      >
+        {{lemma}}
+      </v-btn>
       <word-meta
           :phonetic="wordMeta.phonetic"
           :phonetics="wordMeta.phonetics"
@@ -112,6 +121,10 @@ let newDefinition = ref('')
 let newExample = ref('')
 let newPartOfSpeech = ref<PartOfSpeech>('')
 
+const emit = defineEmits<{
+  (e: 'findNewWord', word: string ): void;
+}>()
+
 watch(
     props.card,
     (newCard) => {
@@ -159,10 +172,27 @@ const wordMeta = computed<IWordMeta>(() => {
     partOfSpeech: [],
   })
 })
+const normalizedLemmas = computed(() => {
+  const entries = props.card.linguaRobotResponse?.entries
+  if (entries) {
+    return entries
+        .map(entry => entry.interpretations)
+        .flat()
+        .map(interpretation => interpretation.normalizedLemmas)
+        .flat()
+        .map(lemma => lemma.lemma)
+        .filter(lemma => lemma !== props.card.word)
+  }
+
+  return []
+})
 const audioUrl = computed(() : string | undefined => props.card.meaning?.phonetics.find(item => item.audio)?.audio)
 const wordStr = computed(() => props.card.word)
 
 //methods
+const findForLemma = (lemma: string) => {
+  emit('findNewWord', lemma)
+}
 const toggleInclude = (include: boolean, definition: DefinitionWithPartOfSpeech) => {
   definition.include = include
 }

@@ -35,8 +35,8 @@
         <word-card
             :ref="addWordCardRef"
             :card="word"
+            @findNewWord="handleAddWordsForm"
         />
-        <pre>{{word.linguaRobotResponse}}</pre>
       </template>
     </expansion-panel>
 
