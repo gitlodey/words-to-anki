@@ -98,6 +98,7 @@ import type PartOfSpeech from './PartOfSpeechList';
 import { PartOfSpeechList } from './PartOfSpeechList';
 import type WordCardComponentRef from './WordCardComponentRef';
 import type {Image} from "@/services/anki-connect-api";
+import { v4 as uuidv4 } from "uuid";
 
 //props
 const props = defineProps<{
@@ -229,9 +230,16 @@ const uploadImg = (fileList: FileList | null) => {
     const reader = new FileReader()
     reader.onloadend = function () {
       const result = reader.result as string
+      let filename = '';
+      if (fileList?.length) {
+        const fileNameArr = fileList[0].name.split('.')
+        const uuid = uuidv4()
+        fileNameArr[0] = `${fileNameArr[0]}-${uuid}`
+        filename = fileNameArr.join('.')
+      }
       state.image = {
         data: result,
-        filename: fileList?.length ? fileList[0].name : ''
+        filename,
       }
     }
 
