@@ -59,8 +59,8 @@
         </div>
         <div class="word-card--image" @paste="handlePasteFile">
           <label class="word-card--image-label" for="image-download">
-            <div class="word-card--image-icon">🖼️</div>
-            <div>drop or paste image here or click on frame</div>
+            <span class="word-card--image-icon">🖼️</span>
+            <span>drop or paste image here or click on frame</span>
             <input
               id="image-download"
               class="word-card--image-input"
@@ -72,7 +72,7 @@
           </label>
 
           <div class="word-card--image-container">
-            <img v-if="state.image" :src="state.image?.data" />
+            <img v-if="state.image" :src="state.image?.data" :alt="wordStr" />
           </div>
         </div>
       </div>
@@ -83,13 +83,13 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
 import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
-import type DefinitionWithPartOfSpeech from "../../types/DefinitionWithPartOfSpeech";
-import type IWordMeta from "../../types/IWordMeta";
+import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
+import type IWordMeta from "@/types/IWordMeta";
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
-import type PartOfSpeech from "../../types/PartOfSpeechList";
-import { PartOfSpeechList } from "../../types/PartOfSpeechList";
-import type WordCardComponentRef from "../../types/WordCardComponentRef";
+import type PartOfSpeech from "@/types/PartOfSpeechList";
+import { PartOfSpeechList } from "@/types/PartOfSpeechList";
+import type WordCardComponentRef from "@/types/WordCardComponentRef";
 import type { Image } from "@/api/AnkiConnectApi";
 import { v4 as uuidv4 } from "uuid";
 

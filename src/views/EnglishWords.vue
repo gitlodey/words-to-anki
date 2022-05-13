@@ -7,7 +7,7 @@
       <v-tab :value="InputTypes.list">{{ InputTypes.list }}</v-tab>
     </v-tabs>
 
-    <add-new-words
+    <word-add-form
       :is-single-word-form="isSingleWordFormShow"
       @addWord="handleAddWordsForm"
     />
@@ -58,11 +58,11 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from "vue";
 import DictionaryApi from "@/api/DictionaryApi";
-import WordCard from "@/components/word-card/WordCard.vue";
-import AddNewWords from "@/components/add-new-words/AddNewWords.vue";
+import WordCard from "@/components/WordCard.vue";
+import WordAddForm from "@/components/WordAddForm.vue";
 import ankiConnectApi from "@/api/AnkiConnectApi";
 import LinguaRobotApi from "@/api/lingua-robot-api";
-import ExpansionPanel from "@/components/expansion-panel/ExpansionPanel.vue";
+import ExpansionPanel from "@/components/ExpansionPanel.vue";
 import InputTypes from "@/types/InputTypes";
 import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
 import type WordCardComponentRef from "@/types/WordCardComponentRef";

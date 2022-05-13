@@ -1,5 +1,5 @@
 <template>
-  <div class="add-words-form">
+  <div class="word-add-form">
     <v-text-field
       class="add-words-form--field"
       v-if="isSingleWordForm"
@@ -7,13 +7,13 @@
       density="compact"
       variant="outlined"
       @keydown.enter="handleInput"
-    ></v-text-field>
+    />
     <v-textarea
       class="add-words-form--field"
       v-else
       v-model="inputData"
       variant="outlined"
-    ></v-textarea>
+    />
     <v-btn
       height="40"
       @click="handle"
@@ -67,7 +67,7 @@ const handleTextarea = () => {
 </script>
 
 <style lang="scss" scoped>
-.add-words-form {
+.word-add-form {
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-column-gap: 20px;
