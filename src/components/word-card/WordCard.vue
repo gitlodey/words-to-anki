@@ -1,90 +1,94 @@
 <template>
-  <div class="word-card">
-    <div class="word-card--content">
-      <v-btn
-          v-for="lemma in normalizedLemmas"
-          :key="lemma"
-          @click="findForLemma(lemma)"
-          size="small"
-          color="primary"
-      >
-        {{lemma}}
-      </v-btn>
-      <word-meta
-          :phonetic="wordMeta.phonetic"
-          :phonetics="wordMeta.phonetics"
-          :antonyms="wordMeta.antonyms"
-          :synonyms="wordMeta.synonyms"
-          :part-of-speech="wordMeta.partOfSpeech"
-      />
-      <word-definition
-          v-for="definition in sortedDefinitions"
-          :key="definition.definition"
-          :definition="definition"
-          @toggleInclude="toggleInclude($event, definition)"
-      />
-
-      <v-btn
-          v-if="state.addDefinitionEnabled === false"
-          @click="addDefinitionFormToggle"
-      >
-        add your definition
-      </v-btn>
-
-      <div
-          class="new-definition-form"
-          v-if="state.addDefinitionEnabled"
-      >
-        <v-text-field
-            v-model="newDefinition"
-            density="compact"
-            variant="outlined"
-        />
-        <v-text-field
-            v-model="newExample"
-            density="compact"
-            variant="outlined"
-        />
-        <select v-model="newPartOfSpeech">
-          <option value=""></option>
-          <option v-for="item in PartOfSpeechList" :key="item">{{item}}</option>
-        </select>
-
-        <div class="button-container">
+  <v-card>
+    <v-card-text>
+      <div class="word-card text--primary">
+        <div class="word-card--content">
           <v-btn
-              @click="addDefinition"
-              color="success"
+              v-for="lemma in normalizedLemmas"
+              :key="lemma"
+              @click="findForLemma(lemma)"
+              size="small"
+              color="primary"
           >
-            add
+            {{lemma}}
           </v-btn>
+          <word-meta
+              :phonetic="wordMeta.phonetic"
+              :phonetics="wordMeta.phonetics"
+              :antonyms="wordMeta.antonyms"
+              :synonyms="wordMeta.synonyms"
+              :part-of-speech="wordMeta.partOfSpeech"
+          />
+          <word-definition
+              v-for="definition in sortedDefinitions"
+              :key="definition.definition"
+              :definition="definition"
+              @toggleInclude="toggleInclude($event, definition)"
+          />
+
           <v-btn
-              @click="cancelNewDefinition"
-              color="error"
+              v-if="state.addDefinitionEnabled === false"
+              @click="addDefinitionFormToggle"
           >
-            cancel
+            add your definition
           </v-btn>
+
+          <div
+              class="new-definition-form"
+              v-if="state.addDefinitionEnabled"
+          >
+            <v-text-field
+                v-model="newDefinition"
+                density="compact"
+                variant="outlined"
+            />
+            <v-text-field
+                v-model="newExample"
+                density="compact"
+                variant="outlined"
+            />
+            <select v-model="newPartOfSpeech">
+              <option value=""></option>
+              <option v-for="item in PartOfSpeechList" :key="item">{{item}}</option>
+            </select>
+
+            <div class="button-container">
+              <v-btn
+                  @click="addDefinition"
+                  color="success"
+              >
+                add
+              </v-btn>
+              <v-btn
+                  @click="cancelNewDefinition"
+                  color="error"
+              >
+                cancel
+              </v-btn>
+            </div>
+          </div>
+        </div>
+        <div class="word-card--image" @paste="handlePasteFile">
+          <label class="word-card--image-label" for="image-download">
+            <div class="word-card--image-icon">🖼️</div>
+            <div>drop or paste image here or click on frame</div>
+            <input
+                id="image-download"
+                class="word-card--image-input"
+                type="file"
+                @change="handleFileUpload"
+                @dragover.prevent
+                @drop="handleFileUpload"
+            />
+          </label>
+
+          <div class="word-card--image-container">
+            <img v-if="state.image" :src="state.image?.data"/>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="word-card--image" @paste="handlePasteFile">
-      <label class="word-card--image-label" for="image-download">
-        <div class="word-card--image-icon">🖼️</div>
-        <div>drop or paste image here or click on frame</div>
-        <input
-            id="image-download"
-            class="word-card--image-input"
-            type="file"
-            @change="handleFileUpload"
-            @dragover.prevent
-            @drop="handleFileUpload"
-        />
-      </label>
-
-      <div class="word-card--image-container">
-        <img v-if="state.image" :src="state.image?.data"/>
-      </div>
-    </div>
-  </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts" setup>
