@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type {DictonaryApiPhonetic} from "@/services/dictionaryapi";
+import type {DictonaryApiPhonetic} from "@/services/DictionaryApi/dictionaryapi";
 import {computed} from "vue";
 
 //props
