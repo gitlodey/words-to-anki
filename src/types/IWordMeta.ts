@@ -1,8 +1,8 @@
-import type { DictonaryApiPhonetic } from "@/services/DictionaryApi/dictionaryapi";
+import type { DictionaryApiPhonetic } from "@/types/DictionaryApi";
 
 export default interface IWordMeta {
   phonetic: string;
-  phonetics: DictonaryApiPhonetic[];
+  phonetics: DictionaryApiPhonetic[];
   synonyms: string[];
   antonyms: string[];
   partOfSpeech: string[];

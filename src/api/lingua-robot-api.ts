@@ -1,4 +1,4 @@
-import type { LinguaRobotResponse } from "@/services/linguaRobot/lingua-robot-types";
+import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
 
 const API_KEY = import.meta.env.VITE_APP_LINGUA_ROBOT_API_KEY as string;
 const options: RequestInit = {

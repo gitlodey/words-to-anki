@@ -1,3 +1,4 @@
+import http from "@/api/Http";
 export interface WordWithShortDefinition {
   word: string;
   shortDefinition: string;
@@ -19,16 +20,11 @@ export interface Image {
 
 class AnkiConnectApi {
   async invoke(action: string, version: number, params = {}) {
-    const response = await fetch("http://127.0.0.1:8765", {
+    return await http.get("http://127.0.0.1:8765", {
       method: "post",
       body: JSON.stringify({ action, version, params }),
       headers: { "Content-Type": "application/json" },
     });
-    const json = await response.json();
-
-    console.log(json);
-
-    return json;
   }
 
   async addWord(

@@ -1,5 +1,5 @@
-import type PartOfSpeech from "@/components/word-card/PartOfSpeechList";
-import type { License } from "@/services/DictionaryApi/dictionaryapi";
+import type PartOfSpeech from "@/types/PartOfSpeechList";
+import type { License } from "@/types/DictionaryApi";
 
 export interface LinguaRobotResponse {
   entries: LinguaRobotEntry[];
