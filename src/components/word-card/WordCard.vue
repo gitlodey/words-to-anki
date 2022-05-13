@@ -82,15 +82,15 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
-import type { WordWithMeaningsType } from "@/views/GetWords.vue";
-import type DefinitionWithPartOfSpeech from "./DefinitionWithPartOfSpeech";
-import type IWordMeta from "./IWordMeta";
+import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
+import type DefinitionWithPartOfSpeech from "../../types/DefinitionWithPartOfSpeech";
+import type IWordMeta from "../../types/IWordMeta";
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
-import type PartOfSpeech from "./PartOfSpeechList";
-import { PartOfSpeechList } from "./PartOfSpeechList";
-import type WordCardComponentRef from "./WordCardComponentRef";
-import type { Image } from "@/services/anki-connect-api";
+import type PartOfSpeech from "../../types/PartOfSpeechList";
+import { PartOfSpeechList } from "../../types/PartOfSpeechList";
+import type WordCardComponentRef from "../../types/WordCardComponentRef";
+import type { Image } from "@/api/AnkiConnectApi";
 import { v4 as uuidv4 } from "uuid";
 
 //props

@@ -24,12 +24,12 @@
 </template>
 
 <script setup lang="ts">
-import type { DictonaryApiPhonetic } from "@/services/DictionaryApi/dictionaryapi";
+import type { DictionaryApiPhonetic } from "@/types/DictionaryApi";
 import { computed } from "vue";
 
 //props
 const props = defineProps<{
-  phonetics: DictonaryApiPhonetic[];
+  phonetics: DictionaryApiPhonetic[];
   phonetic: string;
   synonyms: string[];
   antonyms: string[];

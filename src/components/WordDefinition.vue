@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import type DefinitionWithPartOfSpeech from "./word-card/DefinitionWithPartOfSpeech";
+import type DefinitionWithPartOfSpeech from "../types/DefinitionWithPartOfSpeech";
 
 defineProps<{
   definition: DefinitionWithPartOfSpeech;
