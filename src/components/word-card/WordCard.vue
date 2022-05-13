@@ -122,9 +122,7 @@ const emit = defineEmits<{
 watch(
   props.card,
   (newCard) => {
-    const clonedCard: WordWithMeaningsType = JSON.parse(
-      JSON.stringify(newCard)
-    );
+    const clonedCard: WordWithMeaningsType = { ...newCard };
     state.definitions = clonedCard.meaning.meanings.reduce(
       (acc: DefinitionWithPartOfSpeech[], meaning) => {
         const preparedDefinitions = meaning.definitions.map(
