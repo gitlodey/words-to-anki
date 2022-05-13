@@ -1,4 +1,5 @@
 import type PartOfSpeech from "@/components/word-card/PartOfSpeechList";
+import type DictionaryApiError from "@/services/DictionaryApi/DictionaryApiError";
 
 export type License = {
     name: string,
@@ -38,15 +39,14 @@ export type DictonaryApiResponse = {
 class Dictionaryapi {
     readonly url: string = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
     async getMeaning (word: string) {
-        try {
-            const response = await fetch(`${this.url}${word}`)
-            const body: DictonaryApiResponse[] = await response.json()
+        const response = await fetch(`${this.url}${word}`)
+        const body: DictonaryApiResponse[] | DictionaryApiError = await response.json()
 
+        if (response.ok && body instanceof Array) {
             return body[0];
-
-        } catch (e) {
-            return {}
         }
+
+        throw body
     }
 }
 

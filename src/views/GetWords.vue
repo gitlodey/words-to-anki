@@ -14,12 +14,12 @@
 
 <script setup lang="ts">
   import { reactive } from "vue";
-  import Dictionaryapi from "@/services/dictionaryapi";
+  import Dictionaryapi from "@/services/DictionaryApi/dictionaryapi";
   import LocalJsonApi from "@/services/localJsonApi";
   import type {
     DictonaryApiResponse,
     DictonaryApiDefinition,
-  } from "@/services/dictionaryapi";
+  } from "@/services/DictionaryApi/dictionaryapi";
   import type { LocalJsonWord } from "@/services/localJsonApi";
   import AnkiConnectApi from "@/services/anki-connect-api";
   import type { Audio } from "@/services/anki-connect-api";

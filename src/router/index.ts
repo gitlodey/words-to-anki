@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GetWords from '../views/GetWords.vue'
-import EnglishWords from '../views/EnglishWords.vue'
+import EnglishWords from '../views/EnglishWords/EnglishWords.vue'
 import TurkishWords from '@/views/TurkishWords.vue'
 
 const router = createRouter({
