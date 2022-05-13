@@ -2,86 +2,86 @@ import type PartOfSpeech from "@/components/word-card/PartOfSpeechList";
 import type { License } from "@/services/DictionaryApi/dictionaryapi";
 
 export interface LinguaRobotResponse {
-    entries: LinguaRobotEntry[],
+  entries: LinguaRobotEntry[];
 }
 
 export interface LinguaRobotEntry {
-    entry: string,
-    pronunciations: LinguaRobotPronunciation[],
-    interpretations: LinguaRobotInterpretation[],
-    lexemes: LinguaRobotLexeme[],
-    license: License,
-    sourceUrls: string[],
+  entry: string;
+  pronunciations: LinguaRobotPronunciation[];
+  interpretations: LinguaRobotInterpretation[];
+  lexemes: LinguaRobotLexeme[];
+  license: License;
+  sourceUrls: string[];
 }
 
 export interface LinguaRobotPronunciation {
-    transcriptions: LinguaRobotTranscription[],
-    audio?: LinguaRobotAudio,
-    context: LinguaRobotContext,
+  transcriptions: LinguaRobotTranscription[];
+  audio?: LinguaRobotAudio;
+  context: LinguaRobotContext;
 }
 
 export interface LinguaRobotTranscription {
-    transcription: string,
-    notation: string,
+  transcription: string;
+  notation: string;
 }
 
 export interface LinguaRobotAudio {
-    url: string,
-    sourceUrl: string,
-    license?: License,
+  url: string;
+  sourceUrl: string;
+  license?: License;
 }
 
 export interface LinguaRobotContext {
-    regions: string[],
+  regions: string[];
 }
 
 export interface LinguaRobotInterpretation {
-    lemma: string,
-    normalizedLemmas: LinguaRobotLemma[],
-    partOfSpeech: PartOfSpeech,
-    grammar: LinguaRobotGrammar[],
+  lemma: string;
+  normalizedLemmas: LinguaRobotLemma[];
+  partOfSpeech: PartOfSpeech;
+  grammar: LinguaRobotGrammar[];
 }
 
 export interface LinguaRobotLemma {
-    lemma: string,
+  lemma: string;
 }
 
 export interface LinguaRobotGrammar {
-    number?: string[],
-    case?: string[],
-    person?: string[],
-    verbForm?: string[],
-    tense?: string[],
-    mood?: string[],
-    degree?: string[],
+  number?: string[];
+  case?: string[];
+  person?: string[];
+  verbForm?: string[];
+  tense?: string[];
+  mood?: string[];
+  degree?: string[];
 }
 
 export interface LinguaRobotLexeme {
-    lemma: string,
-    partOfSpeech: PartOfSpeech,
-    senses: LinguaRobotSense[],
-    forms: LinguaRobotForm[],
-    synonymSets?: LinguaRobotSynonym[],
-    antonymSets?: LinguaRobotAntonym[],
+  lemma: string;
+  partOfSpeech: PartOfSpeech;
+  senses: LinguaRobotSense[];
+  forms: LinguaRobotForm[];
+  synonymSets?: LinguaRobotSynonym[];
+  antonymSets?: LinguaRobotAntonym[];
 }
 
 export interface LinguaRobotSense {
-    definition: string,
-    usageExamples?: string[],
-    labels?: string[],
+  definition: string;
+  usageExamples?: string[];
+  labels?: string[];
 }
 
 export interface LinguaRobotForm {
-    form: string,
-    grammar: LinguaRobotGrammar[],
+  form: string;
+  grammar: LinguaRobotGrammar[];
 }
 
 export interface LinguaRobotSynonym {
-    sense: string,
-    synonyms: string[],
+  sense: string;
+  synonyms: string[];
 }
 
 export interface LinguaRobotAntonym {
-    sense: string,
-    antonyms: string[],
+  sense: string;
+  antonyms: string[];
 }

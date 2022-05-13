@@ -1,7 +1,7 @@
 interface DictionaryApiError {
-    title: string,
-    message: string,
-    resolution: string,
+  title: string;
+  message: string;
+  resolution: string;
 }
 
 export default DictionaryApiError;

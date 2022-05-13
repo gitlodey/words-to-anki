@@ -5,15 +5,11 @@
 </template>
 
 <script setup lang="ts">
-
 defineProps<{
-  panels: unknown[],
-  allPanelsOpen: boolean,
-  accordion?: boolean,
-}>()
-
+  panels: unknown[];
+  allPanelsOpen: boolean;
+  accordion?: boolean;
+}>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

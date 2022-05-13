@@ -1,24 +1,22 @@
 <template>
   <div class="word-definition">
     <v-switch
-        :style="{ flex: '0 1 auto' }"
-        color="indigo"
-        :model-value="definition.include"
-        :inline="true"
-        :hide-details="true"
-        @click="$emit('toggleInclude', !definition.include)"
+      :style="{ flex: '0 1 auto' }"
+      color="indigo"
+      :model-value="definition.include"
+      :inline="true"
+      :hide-details="true"
+      @click="$emit('toggleInclude', !definition.include)"
     ></v-switch>
     <div class="word-definition--content">
       <div>
         Definition
         <span v-if="definition.partOfSpeech.length > 0">
-          ({{definition.partOfSpeech}})
+          ({{ definition.partOfSpeech }})
         </span>
-         : {{definition.definition}}
+        : {{ definition.definition }}
       </div>
-      <div v-if="definition.example">
-        Example: {{definition.example}}
-      </div>
+      <div v-if="definition.example">Example: {{ definition.example }}</div>
     </div>
   </div>
 </template>
@@ -27,14 +25,12 @@
 import type DefinitionWithPartOfSpeech from "./word-card/DefinitionWithPartOfSpeech";
 
 defineProps<{
-  definition: DefinitionWithPartOfSpeech,
-}>()
+  definition: DefinitionWithPartOfSpeech;
+}>();
 
 defineEmits<{
-  (e: 'toggleInclude', includeState: boolean ): void;
-}>()
-
-
+  (e: "toggleInclude", includeState: boolean): void;
+}>();
 </script>
 
 <style lang="scss" scoped>

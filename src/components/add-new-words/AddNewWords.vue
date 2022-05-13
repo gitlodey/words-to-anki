@@ -1,24 +1,24 @@
 <template>
   <div class="add-words-form">
     <v-text-field
-        class="add-words-form--field"
-        v-if="isSingleWordForm"
-        v-model="inputData"
-        density="compact"
-        variant="outlined"
-        @keydown.enter="handleInput"
+      class="add-words-form--field"
+      v-if="isSingleWordForm"
+      v-model="inputData"
+      density="compact"
+      variant="outlined"
+      @keydown.enter="handleInput"
     ></v-text-field>
     <v-textarea
-        class="add-words-form--field"
-        v-else
-        v-model="inputData"
-        variant="outlined"
+      class="add-words-form--field"
+      v-else
+      v-model="inputData"
+      variant="outlined"
     ></v-textarea>
     <v-btn
-        height="40"
-        @click="handle"
-        class="add-words-form--btn"
-        color="primary"
+      height="40"
+      @click="handle"
+      class="add-words-form--btn"
+      color="primary"
     >
       Find meaning
     </v-btn>
@@ -26,47 +26,44 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 
 //props
 const props = defineProps<{
-  isSingleWordForm: boolean,
-}>()
+  isSingleWordForm: boolean;
+}>();
 
 //data
-let inputData = ref('')
-
+let inputData = ref("");
 
 //computed
 const wordsArray = computed(() => {
-  return inputData.value
-      .split(/\n/)
-      .filter(word => word !== '')
-})
+  return inputData.value.split(/\n/).filter((word) => word !== "");
+});
 
 //events
 const emit = defineEmits<{
-  (e: 'addWord', word: string ): void
-}>()
+  (e: "addWord", word: string): void;
+}>();
 
 //methods
 const handle = () => {
   if (props.isSingleWordForm) {
-    handleInput()
+    handleInput();
   } else {
-    handleTextarea()
+    handleTextarea();
   }
-}
+};
 const handleInput = () => {
-  emit('addWord', inputData.value)
-  inputData.value = ''
-}
+  emit("addWord", inputData.value);
+  inputData.value = "";
+};
 const handleTextarea = () => {
-  wordsArray.value.forEach(word => {
-    emit('addWord', word)
-  })
-  inputData.value = ''
-}
+  wordsArray.value.forEach((word) => {
+    emit("addWord", word);
+  });
+  inputData.value = "";
+};
 </script>
 
 <style lang="scss" scoped>
