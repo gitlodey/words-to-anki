@@ -34,7 +34,10 @@
             add your definition
           </v-btn>
 
-          <div class="new-definition-form" v-if="state.addDefinitionEnabled">
+          <div
+            class="new-definition-form"
+            v-if="state.addDefinitionEnabled"
+          >
             <v-text-field
               v-model="newDefinition"
               density="compact"
@@ -47,19 +50,38 @@
             />
             <select v-model="newPartOfSpeech">
               <option value=""></option>
-              <option v-for="item in PartOfSpeechList" :key="item">
+              <option
+                v-for="item in PartOfSpeechList"
+                :key="item"
+              >
                 {{ item }}
               </option>
             </select>
 
             <div class="button-container">
-              <v-btn @click="addDefinition" color="success"> add </v-btn>
-              <v-btn @click="cancelNewDefinition" color="error"> cancel </v-btn>
+              <v-btn
+                @click="addDefinition"
+                color="success"
+              >
+                add
+              </v-btn>
+              <v-btn
+                @click="cancelNewDefinition"
+                color="error"
+              >
+                cancel
+              </v-btn>
             </div>
           </div>
         </div>
-        <div class="word-card--image" @paste="handlePasteFile">
-          <label class="word-card--image-label" for="image-download">
+        <div
+          class="word-card--image"
+          @paste="handlePasteFile"
+        >
+          <label
+            class="word-card--image-label"
+            for="image-download"
+          >
             <span class="word-card--image-icon">🖼️</span>
             <span>drop or paste image here or click on frame</span>
             <input
@@ -73,7 +95,11 @@
           </label>
 
           <div class="word-card--image-container">
-            <img v-if="state.image" :src="state.image?.data" :alt="wordStr" />
+            <img
+              v-if="state.image"
+              :src="state.image?.data"
+              :alt="wordStr"
+            />
           </div>
         </div>
       </div>
@@ -81,7 +107,10 @@
   </v-card>
 </template>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import { computed, reactive, ref, watch } from "vue";
 import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
 import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
@@ -314,7 +343,10 @@ defineExpose<WordCardComponentRef>({
 });
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .word-card {
   display: grid;
   grid-template-columns: 3fr 1fr;

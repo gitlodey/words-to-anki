@@ -2,7 +2,10 @@
   <div>
     <h1>Add new English Words to your Anki</h1>
 
-    <v-tabs v-model="selectedInputType" class="input-selector">
+    <v-tabs
+      v-model="selectedInputType"
+      class="input-selector"
+    >
       <v-tab :value="InputTypes.one">{{ InputTypes.one }}</v-tab>
       <v-tab :value="InputTypes.list">{{ InputTypes.list }}</v-tab>
     </v-tabs>
@@ -12,9 +15,18 @@
       @addWord="handleAddWordsForm"
     />
 
-    <h2 v-if="words.length > 1" class="mb20">Words list</h2>
+    <h2
+      v-if="words.length > 1"
+      class="mb20"
+    >
+      Words list
+    </h2>
 
-    <v-btn v-if="words.length > 0" class="mb20" @click="globalToggle">
+    <v-btn
+      v-if="words.length > 0"
+      class="mb20"
+      @click="globalToggle"
+    >
       {{ globalToggleText }}
     </v-btn>
 
@@ -48,14 +60,21 @@
     </div>
 
     <div class="button-container">
-      <v-btn v-if="words.length" @click="saveWordsToAnki" color="success">
+      <v-btn
+        v-if="words.length"
+        @click="saveWordsToAnki"
+        color="success"
+      >
         Save to anki
       </v-btn>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import { computed, reactive, ref } from "vue";
 import DictionaryApi from "@/api/DictionaryApi";
 import WordCard from "@/components/WordCard.vue";
@@ -143,7 +162,10 @@ function addWordCardRef(el: WordCardComponentRef) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .input-selector {
   margin-bottom: 30px;
 }

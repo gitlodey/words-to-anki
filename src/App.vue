@@ -1,12 +1,25 @@
 <template>
   <v-app>
     <v-main>
-      <v-navigation-drawer :expand-on-hover="false" :rail="true">
+      <v-navigation-drawer
+        :expand-on-hover="false"
+        :rail="true"
+      >
         <p class="flag">
-          <router-link activeClass="__active" to="/en"> 🇺🇸 </router-link>
+          <router-link
+            activeClass="__active"
+            to="/en"
+          >
+            🇺🇸
+          </router-link>
         </p>
         <p class="flag">
-          <router-link activeClass="__active" to="/tr"> 🇹🇷 </router-link>
+          <router-link
+            activeClass="__active"
+            to="/tr"
+          >
+            🇹🇷
+          </router-link>
         </p>
       </v-navigation-drawer>
       <v-main>

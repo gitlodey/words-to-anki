@@ -1,6 +1,9 @@
 <template>
   <div class="expansion-panel">
-    <div class="expansion-panel--head" @click="toggle">
+    <div
+      class="expansion-panel--head"
+      @click="toggle"
+    >
       <slot name="head"></slot>
     </div>
     <div class="expansion-panel--body">
@@ -10,7 +13,10 @@
         @before-leave="hide"
         @leave="show"
       >
-        <section class="expansion-panel--content" v-show="isOpen">
+        <section
+          class="expansion-panel--content"
+          v-show="isOpen"
+        >
           <slot name="body"></slot>
         </section>
       </transition>
@@ -18,7 +24,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { ref, watch } from "vue";
 
 const props = defineProps<{
@@ -49,7 +58,10 @@ const hide = (element: HTMLElement) => {
 };
 </script>
 
-<style scoped lang="scss">
+<style
+  scoped
+  lang="scss"
+>
 .expansion-panel--head {
   cursor: pointer;
 

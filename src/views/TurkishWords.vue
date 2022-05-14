@@ -5,7 +5,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import { reactive } from "vue";
 
 const getWord = async (word: string) => {
@@ -15,8 +18,7 @@ const getWord = async (word: string) => {
     },
     method: "GET",
   });
-  const body = (await response.json()) as SozlukResponseItem[];
-  return body;
+  return (await response.json()) as SozlukResponseItem[];
 };
 
 let ekmek: any[] = reactive([]);

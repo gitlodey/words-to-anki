@@ -25,7 +25,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import { computed, ref } from "vue";
 
 //props
@@ -66,7 +69,10 @@ const handleTextarea = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .word-add-form {
   display: grid;
   grid-template-columns: 3fr 1fr;
