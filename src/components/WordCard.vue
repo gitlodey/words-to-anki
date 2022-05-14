@@ -120,7 +120,7 @@ import WordDefinition from "@/components/WordDefinition.vue";
 import type PartOfSpeech from "@/types/PartOfSpeechList";
 import { PartOfSpeechList } from "@/types/PartOfSpeechList";
 import type WordCardComponentRef from "@/types/WordCardComponentRef";
-import type { Image } from "@/api/AnkiConnectApi";
+import type { Image } from "@/api/modules/AnkiConnect";
 import { v4 as uuidv4 } from "uuid";
 
 //props

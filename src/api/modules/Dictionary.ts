@@ -1,7 +1,7 @@
 import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 import type DictionaryApiError from "@/types/DictionaryApiError";
 
-class DictionaryApi {
+class Dictionary {
   readonly url: string = "https://api.dictionaryapi.dev/api/v2/entries/en/";
   async getMeaning(word: string) {
     const response = await fetch(`${this.url}${word}`);
@@ -18,4 +18,4 @@ class DictionaryApi {
   }
 }
 
-export default new DictionaryApi();
+export default new Dictionary();

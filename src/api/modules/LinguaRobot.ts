@@ -10,7 +10,7 @@ const options: RequestInit = {
   },
 };
 
-class LinguaRobotApi {
+class LinguaRobot {
   async getWord(word: string) {
     const response: LinguaRobotResponse = await http.get(
       `https://lingua-robot.p.rapidapi.com/language/v1/entries/en/${word}`,
@@ -21,4 +21,4 @@ class LinguaRobotApi {
   }
 }
 
-export default new LinguaRobotApi();
+export default new LinguaRobot();

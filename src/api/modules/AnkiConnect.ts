@@ -18,7 +18,7 @@ export interface Image {
   fields?: ["Back"];
 }
 
-class AnkiConnectApi {
+class AnkiConnect {
   async invoke(action: string, version: number, params = {}) {
     return await http.get("http://127.0.0.1:8765", {
       method: "post",
@@ -66,4 +66,4 @@ class AnkiConnectApi {
   }
 }
 
-export default new AnkiConnectApi();
+export default new AnkiConnect();

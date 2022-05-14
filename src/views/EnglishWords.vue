@@ -76,11 +76,9 @@
   setup
 >
 import { computed, reactive, ref } from "vue";
-import DictionaryApi from "@/api/DictionaryApi";
 import WordCard from "@/components/WordCard.vue";
 import WordAddForm from "@/components/WordAddForm.vue";
-import ankiConnectApi from "@/api/AnkiConnectApi";
-import LinguaRobotApi from "@/api/LinguaRobotApi";
+import api from "@/api/index";
 import ExpansionPanel from "@/components/ExpansionPanel.vue";
 import InputTypes from "@/types/InputTypes";
 import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
@@ -124,8 +122,8 @@ const addNewWord = (
 };
 const findMeaning = async (word: string) => {
   try {
-    const dictionaryApiResponse = await DictionaryApi.getMeaning(word);
-    const linguaRobotResponse = await LinguaRobotApi.getWord(word);
+    const dictionaryApiResponse = await api.dictionary.getMeaning(word);
+    const linguaRobotResponse = await api.linguaRobot.getWord(word);
 
     return {
       dictionaryApiResponse,
@@ -140,7 +138,7 @@ const findMeaning = async (word: string) => {
 };
 const saveWordsToAnki = () => {
   wordCardInstances?.value?.forEach((wordCard) => {
-    ankiConnectApi.addWord(
+    api.anki.addWord(
       {
         word: wordCard.wordStr,
         shortDefinition: wordCard.formatDefinitionsForAnki(),

@@ -10,7 +10,7 @@ interface LocalJsonSecondDefinition {
   definition: string;
 }
 
-class LocalJsonApi {
+class LocalJson {
   readonly path: string = "./public/words-with-meanings-all-seasons.json";
   private dictionary: LocalJsonWord[] = [];
 
@@ -33,4 +33,4 @@ class LocalJsonApi {
   }
 }
 
-export default new LocalJsonApi();
+export default new LocalJson();

@@ -1,4 +1,4 @@
-import type { Image } from "@/api/AnkiConnectApi";
+import type { Image } from "@/api/modules/AnkiConnect";
 
 interface WordCardComponentRef {
   wordStr: string;
