@@ -1,4 +1,5 @@
 import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
+import http from "@/api/Http";
 
 const API_KEY = import.meta.env.VITE_APP_LINGUA_ROBOT_API_KEY as string;
 const options: RequestInit = {
@@ -11,12 +12,10 @@ const options: RequestInit = {
 
 class LinguaRobotApi {
   async getWord(word: string) {
-    const response: LinguaRobotResponse = await fetch(
+    const response: LinguaRobotResponse = await http.get(
       `https://lingua-robot.p.rapidapi.com/language/v1/entries/en/${word}`,
       options
-    )
-      .then((response) => response.json())
-      .catch((err) => console.error(err));
+    );
 
     return response;
   }

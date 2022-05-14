@@ -17,14 +17,14 @@
 
     <h2
       v-if="words.length > 1"
-      class="mb20"
+      class="mb-4"
     >
       Words list
     </h2>
 
     <v-btn
       v-if="words.length > 0"
-      class="mb20"
+      class="mb-4"
       @click="globalToggle"
     >
       {{ globalToggleText }}
@@ -80,7 +80,7 @@ import DictionaryApi from "@/api/DictionaryApi";
 import WordCard from "@/components/WordCard.vue";
 import WordAddForm from "@/components/WordAddForm.vue";
 import ankiConnectApi from "@/api/AnkiConnectApi";
-import LinguaRobotApi from "@/api/lingua-robot-api";
+import LinguaRobotApi from "@/api/LinguaRobotApi";
 import ExpansionPanel from "@/components/ExpansionPanel.vue";
 import InputTypes from "@/types/InputTypes";
 import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
