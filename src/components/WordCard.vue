@@ -9,6 +9,7 @@
             @click="findForLemma(lemma)"
             size="small"
             color="primary"
+            class="mb-2"
           >
             {{ lemma }}
           </v-btn>

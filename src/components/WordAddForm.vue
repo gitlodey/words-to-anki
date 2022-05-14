@@ -34,7 +34,7 @@ const props = defineProps<{
 }>();
 
 //data
-let inputData = ref("");
+const inputData = ref("");
 
 //computed
 const wordsArray = computed(() => {
