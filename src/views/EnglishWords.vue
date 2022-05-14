@@ -32,7 +32,7 @@
 
     <div class="word-card-list">
       <expansion-panel
-        v-for="word in words"
+        v-for="word in englishWordsStore.words"
         :open="allPanelsOpen"
         :key="word.word"
         :style="{ marginBottom: '20px' }"
@@ -86,10 +86,11 @@ import WordAddForm from "@/components/WordAddForm.vue";
 import api from "@/api/index";
 import ExpansionPanel from "@/components/ExpansionPanel.vue";
 import InputTypes from "@/types/InputTypes";
-import type { LinguaRobotResponse } from "@/types/lingua-robot-types";
 import type WordCardComponentRef from "@/types/WordCardComponentRef";
 import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
-import type { DictionaryApiResponse } from "@/types/DictionaryApi";
+import { useEnglishWords } from "@/store/EnglishWords";
+
+const englishWordsStore = useEnglishWords();
 
 //data
 const wordCardInstances = ref<WordCardComponentRef[] | null>([]);
@@ -107,40 +108,9 @@ let globalToggleText = computed(() =>
 
 //methods
 const handleAddWordsForm = async (word: string) => {
-  const preparedWord = word.trim().toLowerCase();
-  const { dictionaryApiResponse, linguaRobotResponse } = await findMeaning(
-    preparedWord
-  );
-  if (dictionaryApiResponse && linguaRobotResponse) {
-    addNewWord(dictionaryApiResponse, linguaRobotResponse);
-  }
+  await englishWordsStore.getWord(word.trim().toLowerCase());
 };
-const addNewWord = (
-  dictionaryApiResponse: DictionaryApiResponse,
-  linguaRobotResponse: LinguaRobotResponse
-) => {
-  words.unshift({
-    word: dictionaryApiResponse?.word,
-    meaning: dictionaryApiResponse,
-    linguaRobotResponse: linguaRobotResponse,
-  });
-};
-const findMeaning = async (word: string) => {
-  try {
-    const dictionaryApiResponse = await api.dictionary.getMeaning(word);
-    const linguaRobotResponse = await api.linguaRobot.getWord(word);
 
-    return {
-      dictionaryApiResponse,
-      linguaRobotResponse,
-    };
-  } catch (e) {
-    if (e instanceof Error) {
-      alert(`${word}: ${e.message}`);
-    }
-    return {};
-  }
-};
 const saveWordsToAnki = () => {
   wordCardInstances?.value?.forEach((wordCard) => {
     api.anki.addWord(
@@ -162,10 +132,7 @@ const addWordCardRef = (el: WordCardComponentRef) => {
   }
 };
 const deleteWord = (word: WordWithMeaningsType) => {
-  const index = words.indexOf(word);
-  if (index > -1) {
-    words.splice(index, 1);
-  }
+  englishWordsStore.deleteWord(word);
 };
 </script>
 
