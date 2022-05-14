@@ -16,14 +16,14 @@
     />
 
     <h2
-      v-if="words.length > 1"
+      v-if="englishWordsStore.words.length > 1"
       class="mb-4"
     >
       Words list
     </h2>
 
     <v-btn
-      v-if="words.length > 0"
+      v-if="englishWordsStore.words.length > 0"
       class="mb-4"
       @click="globalToggle"
     >
@@ -66,7 +66,7 @@
 
     <div class="button-container">
       <v-btn
-        v-if="words.length"
+        v-if="englishWordsStore.words.length"
         @click="saveWordsToAnki"
         color="success"
       >
@@ -80,7 +80,7 @@
   lang="ts"
   setup
 >
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import WordCard from "@/components/WordCard.vue";
 import WordAddForm from "@/components/WordAddForm.vue";
 import api from "@/api/index";
@@ -94,7 +94,6 @@ const englishWordsStore = useEnglishWords();
 
 //data
 const wordCardInstances = ref<WordCardComponentRef[] | null>([]);
-const words = reactive<WordWithMeaningsType[]>([]);
 let selectedInputType = ref<InputTypes>(InputTypes.one);
 let allPanelsOpen = ref<boolean>(true);
 
