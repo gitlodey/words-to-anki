@@ -18,9 +18,12 @@ export interface Image {
   fields?: ["Back"];
 }
 
+const ANKI_CONNECT_URL = "http://127.0.0.1:8765";
+const ANKI_DECK_NAME = "English 2022";
+
 class AnkiConnect {
   async invoke(action: string, version: number, params = {}) {
-    return await http.get("http://127.0.0.1:8765", {
+    return await http.get(ANKI_CONNECT_URL, {
       method: "post",
       body: JSON.stringify({ action, version, params }),
       headers: { "Content-Type": "application/json" },
@@ -50,7 +53,7 @@ class AnkiConnect {
     }
     await this.invoke("addNote", 6, {
       note: {
-        deckName: "English 2022",
+        deckName: ANKI_DECK_NAME,
         modelName: "Basic",
         fields: {
           Front: word.word,
