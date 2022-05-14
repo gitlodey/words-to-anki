@@ -1,6 +1,9 @@
 <template>
   <div class="word-meta">
-    <template v-for="phonetic in phonetics" :key="phonetic.text">
+    <template
+      v-for="phonetic in phonetics"
+      :key="phonetic.text"
+    >
       <audio
         class="word-meta--item"
         v-if="phonetic.audio"
@@ -15,7 +18,10 @@
 
     <div class="word-meta--item">Part of speech: {{ partOfSpeechStr }}</div>
 
-    <div class="word-meta--item" v-if="synonyms.length">
+    <div
+      class="word-meta--item"
+      v-if="synonyms.length"
+    >
       Synonyms: {{ synonymsStr }}
     </div>
     <div v-if="antonyms.length">Antonyms: {{ antonymsStr }}</div>
@@ -23,7 +29,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import type { DictionaryApiPhonetic } from "@/types/DictionaryApi";
 import { computed } from "vue";
 
@@ -55,7 +64,10 @@ const prepareArray = (array: string[]): string => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .word-meta {
   margin-bottom: 20px;
 

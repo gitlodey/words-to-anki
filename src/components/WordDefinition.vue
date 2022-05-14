@@ -1,7 +1,7 @@
 <template>
   <div class="word-definition">
     <v-switch
-      :style="{ flex: '0 1 auto' }"
+      class="word-definition--status"
       color="indigo"
       :model-value="definition.include"
       :inline="true"
@@ -21,7 +21,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import type DefinitionWithPartOfSpeech from "../types/DefinitionWithPartOfSpeech";
 
 defineProps<{
@@ -33,10 +36,17 @@ defineEmits<{
 }>();
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .word-definition {
   margin-bottom: 10px;
   display: flex;
+
+  &--status {
+    flex: 0 1 auto;
+  }
 
   &--content {
     padding-left: 10px;
