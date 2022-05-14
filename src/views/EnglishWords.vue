@@ -47,6 +47,11 @@
                 {{ word.meaning.meanings[0].definitions[0].definition }}
               </p>
             </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn @click="deleteWord(word)"> 🗑️ </v-btn>
+            </v-card-actions>
           </v-card>
         </template>
         <template #body>
@@ -148,16 +153,20 @@ const saveWordsToAnki = () => {
     );
   });
 };
-
 const globalToggle = () => (allPanelsOpen.value = !allPanelsOpen.value);
-
-function addWordCardRef(el: WordCardComponentRef) {
+const addWordCardRef = (el: WordCardComponentRef) => {
   if (el && "formatDefinitionsForAnki" in el) {
     if (wordCardInstances?.value?.includes(el) === false) {
       wordCardInstances.value.push(el);
     }
   }
-}
+};
+const deleteWord = (word: WordWithMeaningsType) => {
+  const index = words.indexOf(word);
+  if (index > -1) {
+    words.splice(index, 1);
+  }
+};
 </script>
 
 <style
