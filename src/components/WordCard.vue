@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <div class="word-card text--primary">
+      <div class="word-card">
         <div class="word-card--content">
           <v-btn
             v-for="lemma in card.normalizedLemmas"
@@ -159,7 +159,7 @@ const findForLemma = (lemma: string) => {
 };
 const toggleInclude = (
   include: boolean,
-  definition: DefinitionWithPartOfSpeech,
+  definition: DefinitionWithPartOfSpeech
 ) => {
   englishWordsStore.updateDefinitionStatus(props.card, definition, include);
 };
