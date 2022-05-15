@@ -34,7 +34,7 @@ class AnkiConnect {
   async addWord(
     word: WordWithShortDefinition,
     audioUrl?: string | undefined,
-    imageData?: Image | null
+    imageData?: Image | null,
   ) {
     let audio: Audio | undefined;
     let picture: Image | undefined;

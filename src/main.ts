@@ -14,7 +14,7 @@ app.use(
   createVuetify({
     components,
     directives,
-  })
+  }),
 );
 app.use(createPinia());
 

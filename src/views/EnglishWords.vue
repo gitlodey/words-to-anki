@@ -95,10 +95,10 @@ let allPanelsOpen = ref<boolean>(true);
 
 //computed
 let isSingleWordFormShow = computed(
-  () => selectedInputType.value === InputTypes.one
+  () => selectedInputType.value === InputTypes.one,
 );
 let globalToggleText = computed(() =>
-  allPanelsOpen.value ? "Close all" : "Open all"
+  allPanelsOpen.value ? "Close all" : "Open all",
 );
 
 //methods

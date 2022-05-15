@@ -6,15 +6,15 @@ import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 
 export const usePrepareEnglishCard = (
   dictionaryApiResponse: DictionaryApiResponse,
-  linguaRobotResponse: LinguaRobotResponse
+  linguaRobotResponse: LinguaRobotResponse,
 ) => {
   const { meta, definitions } = usePrepareEnglishMetaAndDefinitions(
-    dictionaryApiResponse
+    dictionaryApiResponse,
   );
 
   const { normalizedLemmas } = usePrepareNormalizedLemmas(
     linguaRobotResponse,
-    dictionaryApiResponse.word
+    dictionaryApiResponse.word,
   );
 
   const audioUrl = meta.phonetics.find((item) => item.audio)?.audio;

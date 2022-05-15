@@ -3,12 +3,12 @@ import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
 
 export const usePrepareEnglishMetaAndDefinitions = (
-  dictionaryApiResponse: DictionaryApiResponse
+  dictionaryApiResponse: DictionaryApiResponse,
 ) => {
   const { meta, definitions } = dictionaryApiResponse.meanings.reduce(
     (
       acc: { meta: IWordMeta; definitions: DefinitionWithPartOfSpeech[] },
-      meaning
+      meaning,
     ) => {
       acc.meta.synonyms.push(...meaning.synonyms);
       acc.meta.antonyms.push(...meaning.antonyms);
@@ -21,7 +21,7 @@ export const usePrepareEnglishMetaAndDefinitions = (
             partOfSpeech: meaning.partOfSpeech,
             include: true,
           };
-        }
+        },
       );
 
       acc.definitions.push(...preparedDefinitions);
@@ -37,7 +37,7 @@ export const usePrepareEnglishMetaAndDefinitions = (
         partOfSpeech: [],
       },
       definitions: [],
-    }
+    },
   );
 
   return { meta, definitions };

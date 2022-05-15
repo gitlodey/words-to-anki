@@ -15,7 +15,7 @@ export const useFormatTextForAnki = (wordCard: EnglishWordCard) => {
   });
   if (wordCard.meta.partOfSpeech.length > 0) {
     ankiCardContent += `Part of speech: <p>${wordCard.meta.partOfSpeech.join(
-      ", "
+      ", ",
     )}</p>`;
   }
   if (wordCard.meta.synonyms.length > 0) {

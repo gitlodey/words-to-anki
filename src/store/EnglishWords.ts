@@ -25,7 +25,7 @@ export const useEnglishWords = defineStore("EnglishWords", {
       if (dictionaryApiResponse && linguaRobotResponse) {
         const { englishWordCard } = usePrepareEnglishCard(
           dictionaryApiResponse,
-          linguaRobotResponse
+          linguaRobotResponse,
         );
 
         this.words.unshift(englishWordCard);
@@ -62,7 +62,7 @@ export const useEnglishWords = defineStore("EnglishWords", {
     },
     addDefinitionToWord(
       word: EnglishWordCard,
-      definition: DefinitionWithPartOfSpeech
+      definition: DefinitionWithPartOfSpeech,
     ) {
       this.words.map((item) => {
         if (item === word) {
@@ -73,7 +73,7 @@ export const useEnglishWords = defineStore("EnglishWords", {
     updateDefinitionStatus(
       word: EnglishWordCard,
       definition: DefinitionWithPartOfSpeech,
-      include: boolean
+      include: boolean,
     ) {
       this.words.map((item) => {
         if (item === word) {
@@ -95,7 +95,7 @@ export const useEnglishWords = defineStore("EnglishWords", {
             shortDefinition: ankiCardContent,
           },
           word.audioUrl,
-          ankiImage
+          ankiImage,
         );
       });
     },

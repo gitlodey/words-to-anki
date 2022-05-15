@@ -14,7 +14,7 @@ class LinguaRobot {
   async getWord(word: string) {
     const response: LinguaRobotResponse = await http.get(
       `https://lingua-robot.p.rapidapi.com/language/v1/entries/en/${word}`,
-      options
+      options,
     );
 
     return response;

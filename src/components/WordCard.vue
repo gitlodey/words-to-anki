@@ -159,7 +159,7 @@ const findForLemma = (lemma: string) => {
 };
 const toggleInclude = (
   include: boolean,
-  definition: DefinitionWithPartOfSpeech
+  definition: DefinitionWithPartOfSpeech,
 ) => {
   englishWordsStore.updateDefinitionStatus(props.card, definition, include);
 };
