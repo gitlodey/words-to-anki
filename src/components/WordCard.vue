@@ -4,7 +4,7 @@
       <div class="word-card text--primary">
         <div class="word-card--content">
           <v-btn
-            v-for="lemma in normalizedLemmas"
+            v-for="lemma in card.normalizedLemmas"
             :key="lemma"
             @click="findForLemma(lemma)"
             size="small"
@@ -14,14 +14,14 @@
             {{ lemma }}
           </v-btn>
           <word-meta
-            :phonetic="wordMeta.phonetic"
-            :phonetics="wordMeta.phonetics"
-            :antonyms="wordMeta.antonyms"
-            :synonyms="wordMeta.synonyms"
-            :part-of-speech="wordMeta.partOfSpeech"
+            :phonetic="card.meta.phonetic"
+            :phonetics="card.meta.phonetics"
+            :antonyms="card.meta.antonyms"
+            :synonyms="card.meta.synonyms"
+            :part-of-speech="card.meta.partOfSpeech"
           />
           <word-definition
-            v-for="definition in sortedDefinitions"
+            v-for="definition in card.definitions"
             :key="definition.definition"
             :definition="definition"
             @toggleInclude="toggleInclude($event, definition)"
@@ -95,10 +95,10 @@
           </label>
 
           <div class="word-card--image-container">
-            <template v-if="state.image">
+            <template v-if="card.image">
               <img
-                :src="state.image?.data"
-                :alt="wordStr"
+                :src="card.image?.data"
+                :alt="card.word"
               />
               <div class="button-wrap">
                 <v-btn
@@ -121,34 +121,28 @@
   lang="ts"
   setup
 >
-import { computed, reactive, ref, watch } from "vue";
-import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
-import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
-import type IWordMeta from "@/types/IWordMeta";
 import WordMeta from "@/components/WordMeta.vue";
 import WordDefinition from "@/components/WordDefinition.vue";
-import type PartOfSpeech from "@/types/PartOfSpeechList";
+import { reactive, ref } from "vue";
 import { PartOfSpeechList } from "@/types/PartOfSpeechList";
-import type WordCardComponentRef from "@/types/WordCardComponentRef";
-import type { Image } from "@/api/modules/AnkiConnect";
 import { v4 as uuidv4 } from "uuid";
+import { useEnglishWords } from "@/store/EnglishWords";
+import type PartOfSpeech from "@/types/PartOfSpeechList";
+import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
+import type EnglishWordCard from "@/types/EnglishWordCard";
+
+const englishWordsStore = useEnglishWords();
 
 //props
 const props = defineProps<{
-  card: WordWithMeaningsType;
+  card: EnglishWordCard;
 }>();
 
 //data
 const state = reactive<{
-  definitions: DefinitionWithPartOfSpeech[];
-  newDefinitions: DefinitionWithPartOfSpeech[];
   addDefinitionEnabled: boolean;
-  image: Image | null;
 }>({
-  definitions: [],
-  newDefinitions: [],
   addDefinitionEnabled: false,
-  image: null,
 });
 
 let newDefinition = ref("");
@@ -159,80 +153,6 @@ const emit = defineEmits<{
   (e: "findNewWord", word: string): void;
 }>();
 
-watch(
-  props.card,
-  (newCard) => {
-    const clonedCard: WordWithMeaningsType = { ...newCard };
-    state.definitions = clonedCard.meaning.meanings.reduce(
-      (acc: DefinitionWithPartOfSpeech[], meaning) => {
-        const preparedDefinitions = meaning.definitions.map(
-          (definition): DefinitionWithPartOfSpeech => {
-            return {
-              ...definition,
-              partOfSpeech: meaning.partOfSpeech,
-              include: true,
-            };
-          }
-        );
-        acc.push(...preparedDefinitions);
-        return acc;
-      },
-      []
-    );
-  },
-  {
-    deep: true,
-    immediate: true,
-  }
-);
-
-//computed
-const sortedDefinitions = computed(() => {
-  const clonedDefinitions = [...state.newDefinitions, ...state.definitions];
-  return clonedDefinitions.sort((defA, defB) => {
-    if (defA.include === true && defB.include === false) return -1;
-    if (defA.include === false && defB.include === true) return 1;
-    return 0;
-  });
-});
-const wordMeta = computed<IWordMeta>(() => {
-  return props.card.meaning.meanings.reduce(
-    (acc: IWordMeta, meaning) => {
-      acc.synonyms.push(...meaning.synonyms);
-      acc.antonyms.push(...meaning.antonyms);
-      acc.partOfSpeech.push(meaning.partOfSpeech);
-
-      return acc;
-    },
-    {
-      phonetic: props.card.meaning.phonetic,
-      phonetics: props.card.meaning.phonetics,
-      synonyms: [],
-      antonyms: [],
-      partOfSpeech: [],
-    }
-  );
-});
-const normalizedLemmas = computed(() => {
-  const entries = props.card.linguaRobotResponse?.entries;
-  if (entries) {
-    return entries
-      .map((entry) => entry.interpretations)
-      .flat()
-      .map((interpretation) => interpretation.normalizedLemmas)
-      .flat()
-      .map((lemma) => lemma.lemma)
-      .filter((lemma) => lemma !== props.card.word);
-  }
-
-  return [];
-});
-const audioUrl = computed(
-  (): string | undefined =>
-    props.card.meaning?.phonetics.find((item) => item.audio)?.audio
-);
-const wordStr = computed(() => props.card.word);
-
 //methods
 const findForLemma = (lemma: string) => {
   emit("findNewWord", lemma);
@@ -241,10 +161,10 @@ const toggleInclude = (
   include: boolean,
   definition: DefinitionWithPartOfSpeech
 ) => {
-  definition.include = include;
+  englishWordsStore.updateDefinitionStatus(props.card, definition, include);
 };
 const addDefinition = () => {
-  state.newDefinitions.push({
+  englishWordsStore.addDefinitionToWord(props.card, {
     definition: newDefinition.value,
     example: newExample.value,
     partOfSpeech: newPartOfSpeech.value,
@@ -253,8 +173,7 @@ const addDefinition = () => {
     antonyms: [],
   });
 
-  newDefinition.value = "";
-  newExample.value = "";
+  cancelNewDefinition();
 };
 const cancelNewDefinition = () => {
   newDefinition.value = "";
@@ -274,7 +193,7 @@ const handlePasteFile = (event: ClipboardEvent) => {
 const uploadImg = (fileList: FileList | null) => {
   if (fileList) {
     const reader = new FileReader();
-    reader.onloadend = function () {
+    reader.onloadend = () => {
       const result = reader.result as string;
       let filename = "";
       if (fileList?.length) {
@@ -283,75 +202,19 @@ const uploadImg = (fileList: FileList | null) => {
         fileNameArr[0] = `${fileNameArr[0]}-${uuid}`;
         filename = fileNameArr.join(".");
       }
-      state.image = {
+
+      englishWordsStore.updateWordImage(props.card, {
         data: result,
         filename,
-      };
+      });
     };
 
     reader.readAsDataURL(fileList[0]);
   }
 };
-const deleteImage = () => (state.image = null);
+const deleteImage = () => englishWordsStore.updateWordImage(props.card, null);
 const addDefinitionFormToggle = () =>
   (state.addDefinitionEnabled = !state.addDefinitionEnabled);
-const formatDefinitionsForAnki = (): string => {
-  let totalDefinition = "";
-
-  totalDefinition += `<h1>${props.card.word}</h1>`;
-  props.card.meaning.phonetics.map((phonetic, index, array) => {
-    if (phonetic.text) {
-      totalDefinition += `<i>${phonetic.text}</i><br/>`;
-    }
-
-    if (index > 0 && array.length === index) {
-      totalDefinition += `<br/>`;
-    }
-  });
-  if (wordMeta.value.partOfSpeech.length > 0) {
-    totalDefinition += `Part of speech: <p>${wordMeta.value.partOfSpeech.join(
-      ", "
-    )}</p>`;
-  }
-  if (wordMeta.value.synonyms.length > 0) {
-    totalDefinition += `Synonims: <p>${wordMeta.value.synonyms.join(", ")}</p>`;
-  }
-  if (wordMeta.value.antonyms.length > 0) {
-    totalDefinition += `Antonyms: <p>${wordMeta.value.antonyms.join(", ")}</p>`;
-  }
-  sortedDefinitions.value.map((definition) => {
-    if (definition.include) {
-      totalDefinition += `<b>Definition${
-        definition.partOfSpeech ? " (" + definition.partOfSpeech + ")" : ""
-      }:</b> <span>${definition.definition}</span>`;
-      if (definition.example) {
-        totalDefinition += `<br/><b>Example:</b> <span>${definition.example}</span><br/><br/>`;
-      } else {
-        totalDefinition += `<br/><br/>`;
-      }
-    }
-  });
-
-  return totalDefinition;
-};
-const getAudioForAnki = (): string | undefined => audioUrl.value;
-const getImageData = (): Image | null => {
-  if (state.image) {
-    return {
-      data: state.image.data?.replace("data:", "").replace(/^.+,/, ""),
-      filename: state.image.filename,
-    };
-  }
-
-  return null;
-};
-
-defineExpose<WordCardComponentRef>({
-  formatDefinitionsForAnki,
-  getAudioForAnki,
-  getImageData,
-  wordStr: wordStr.value,
-});
 </script>
 
 <style

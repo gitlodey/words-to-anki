@@ -44,7 +44,7 @@
                 {{ word.word }}
               </p>
               <p>
-                {{ word.meaning.meanings[0].definitions[0].definition }}
+                {{ word.definitions[0].definition }}
               </p>
             </v-card-text>
             <v-card-actions>
@@ -56,7 +56,6 @@
         </template>
         <template #body>
           <word-card
-            :ref="addWordCardRef"
             :card="word"
             @findNewWord="handleAddWordsForm"
           />
@@ -80,20 +79,17 @@
   lang="ts"
   setup
 >
-import { computed, ref } from "vue";
 import WordCard from "@/components/WordCard.vue";
 import WordAddForm from "@/components/WordAddForm.vue";
-import api from "@/api/index";
 import ExpansionPanel from "@/components/ExpansionPanel.vue";
 import InputTypes from "@/types/InputTypes";
-import type WordCardComponentRef from "@/types/WordCardComponentRef";
-import type { WordWithMeaningsType } from "@/types/WordWithMeaningsType";
+import { computed, ref } from "vue";
 import { useEnglishWords } from "@/store/EnglishWords";
+import type EnglishWordCard from "@/types/EnglishWordCard";
 
 const englishWordsStore = useEnglishWords();
 
 //data
-const wordCardInstances = ref<WordCardComponentRef[] | null>([]);
 let selectedInputType = ref<InputTypes>(InputTypes.one);
 let allPanelsOpen = ref<boolean>(true);
 
@@ -110,27 +106,9 @@ const handleAddWordsForm = async (word: string) => {
   await englishWordsStore.getWord(word.trim().toLowerCase());
 };
 
-const saveWordsToAnki = () => {
-  wordCardInstances?.value?.forEach((wordCard) => {
-    api.anki.addWord(
-      {
-        word: wordCard.wordStr,
-        shortDefinition: wordCard.formatDefinitionsForAnki(),
-      },
-      wordCard.getAudioForAnki(),
-      wordCard.getImageData()
-    );
-  });
-};
+const saveWordsToAnki = () => englishWordsStore.saveWordsToAnki();
 const globalToggle = () => (allPanelsOpen.value = !allPanelsOpen.value);
-const addWordCardRef = (el: WordCardComponentRef) => {
-  if (el && "formatDefinitionsForAnki" in el) {
-    if (wordCardInstances?.value?.includes(el) === false) {
-      wordCardInstances.value.push(el);
-    }
-  }
-};
-const deleteWord = (word: WordWithMeaningsType) => {
+const deleteWord = (word: EnglishWordCard) => {
   englishWordsStore.deleteWord(word);
 };
 </script>
