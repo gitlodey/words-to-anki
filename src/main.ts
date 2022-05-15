@@ -8,13 +8,14 @@ import * as directives from "vuetify/directives";
 import { createPinia } from "pinia";
 
 const app = createApp(App);
-const vuetify = createVuetify({
-  components,
-  directives,
-});
 
 app.use(router);
-app.use(vuetify);
+app.use(
+  createVuetify({
+    components,
+    directives,
+  })
+);
 app.use(createPinia());
 
 app.mount("#app");
