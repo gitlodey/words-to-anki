@@ -95,11 +95,21 @@
           </label>
 
           <div class="word-card--image-container">
-            <img
-              v-if="state.image"
-              :src="state.image?.data"
-              :alt="wordStr"
-            />
+            <template v-if="state.image">
+              <img
+                :src="state.image?.data"
+                :alt="wordStr"
+              />
+              <div class="button-wrap">
+                <v-btn
+                  size="small"
+                  class="float-md-right mt-2"
+                  @click="deleteImage"
+                >
+                  Delete image
+                </v-btn>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -282,6 +292,7 @@ const uploadImg = (fileList: FileList | null) => {
     reader.readAsDataURL(fileList[0]);
   }
 };
+const deleteImage = () => (state.image = null);
 const addDefinitionFormToggle = () =>
   (state.addDefinitionEnabled = !state.addDefinitionEnabled);
 const formatDefinitionsForAnki = (): string => {
