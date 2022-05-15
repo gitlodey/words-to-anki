@@ -33,8 +33,8 @@
   setup
   lang="ts"
 >
-import type { DictionaryApiPhonetic } from "@/types/DictionaryApi";
 import { computed } from "vue";
+import type { DictionaryApiPhonetic } from "@/types/DictionaryApi";
 
 //props
 const props = defineProps<{

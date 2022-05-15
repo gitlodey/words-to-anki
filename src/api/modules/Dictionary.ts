@@ -1,5 +1,5 @@
-import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 import type DictionaryApiError from "@/types/DictionaryApiError";
+import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 
 class Dictionary {
   readonly url: string = "https://api.dictionaryapi.dev/api/v2/entries/en/";

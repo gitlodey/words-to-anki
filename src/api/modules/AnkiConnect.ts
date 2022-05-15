@@ -1,4 +1,5 @@
 import http from "@/api/Http";
+
 export interface WordWithShortDefinition {
   word: string;
   shortDefinition: string;
