@@ -57,16 +57,3 @@ const hide = (element: HTMLElement) => {
   element.style.opacity = "1";
 };
 </script>
-
-<style
-  scoped
-  lang="scss"
->
-.expansion-panel--head {
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e5e5e5;
-  }
-}
-</style>

@@ -17,5 +17,3 @@ defineProps<{
   accordion?: boolean;
 }>();
 </script>
-
-<style scoped></style>
