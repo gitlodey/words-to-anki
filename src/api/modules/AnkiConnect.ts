@@ -1,22 +1,15 @@
 import http from "@/api/Http";
+import type AnkiCardImage from "@/types/AnkiCardImage";
 
-export interface WordWithShortDefinition {
+interface WordWithShortDefinition {
   word: string;
   shortDefinition: string;
 }
 
-export interface Audio {
+interface Audio {
   url: string;
   filename: string;
   fields: ["Front"];
-}
-
-export interface Image {
-  url?: string;
-  data?: string;
-  path?: string;
-  filename: string;
-  fields?: ["Back"];
 }
 
 const ANKI_CONNECT_URL = "http://127.0.0.1:8765";
@@ -42,10 +35,10 @@ class AnkiConnect {
   async addWord(
     word: WordWithShortDefinition,
     audioUrl?: string | undefined,
-    imageData?: Image | null,
+    imageData?: AnkiCardImage | null,
   ) {
     let audio: Audio | undefined;
-    let picture: Image | undefined;
+    let picture: AnkiCardImage | undefined;
     if (audioUrl) {
       audio = {
         url: audioUrl,

@@ -1,6 +1,6 @@
-import type { Image } from "@/api/modules/AnkiConnect";
+import type AnkiCardImage from "@/types/AnkiCardImage";
 
-export const useFormatImageForAnki = (image: Image | null) => {
+export const useFormatImageForAnki = (image: AnkiCardImage | null) => {
   if (!image) return { ankiImage: null };
 
   const ankiImage = {

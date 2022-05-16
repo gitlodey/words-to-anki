@@ -1,10 +1,10 @@
 import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
 import type IWordMeta from "@/types/IWordMeta";
-import type { Image } from "@/api/modules/AnkiConnect";
+import type AnkiCardImage from "@/types/AnkiCardImage";
 
 export default interface EnglishWordCard {
   word: string;
-  image: Image | null;
+  image: AnkiCardImage | null;
   audioUrl: string | undefined;
   definitions: DefinitionWithPartOfSpeech[];
   meta: IWordMeta;

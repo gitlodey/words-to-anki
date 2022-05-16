@@ -5,7 +5,7 @@ import { useFormatTextForAnki } from "@/composables/useFormatTextForAnki";
 import { useFormatImageForAnki } from "@/composables/useFormatImageForAnki";
 import type EnglishWordCard from "@/types/EnglishWordCard";
 import type DefinitionWithPartOfSpeech from "@/types/DefinitionWithPartOfSpeech";
-import type { Image } from "@/api/modules/AnkiConnect";
+import type AnkiCardImage from "@/types/AnkiCardImage";
 
 interface EnglishWordsStore {
   words: EnglishWordCard[];
@@ -53,7 +53,7 @@ export const useEnglishWords = defineStore("EnglishWords", {
         this.words.splice(index, 1);
       }
     },
-    updateWordImage(word: EnglishWordCard, image: Image | null) {
+    updateWordImage(word: EnglishWordCard, image: AnkiCardImage | null) {
       this.words.map((item) => {
         if (item === word) {
           item.image = image;
