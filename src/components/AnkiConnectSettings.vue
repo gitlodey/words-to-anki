@@ -1,12 +1,14 @@
 <template>
   <v-card class="mb-4">
     <v-card-text>
+      <div class="mb-2">Anki-connect URL</div>
       <v-text-field
         v-model="ankiStore.url"
         density="compact"
         variant="outlined"
       />
 
+      <div class="mb-2">Deck name</div>
       <v-text-field
         v-model="ankiStore.deckName"
         density="compact"
