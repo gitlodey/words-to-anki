@@ -1,25 +1,22 @@
 # words-meaning-anki
 
-This template should help get you started developing with Vue 3 in Vite.
+Приложения для изучение новых слов с помощью [Anki](https://apps.ankiweb.net/).
+Для сохранения карточек в ваш словарь установите десктопную версию Anki и поставьте расширение [Anki-connect](https://github.com/FooSoft/anki-connect).
 
-## Recommended IDE Setup
+### API
+Для поиска новых слов используются словари: 
+- [linguarobot](https://www.linguarobot.io/)
+- [dictionaryapi](https://dictionaryapi.dev/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
+Linguarobot не работает без API_KEY, чтобы добавить его в приложение, создайте в корне проекта файл `.env.local` и добавьте переменную:
+```sh
+VITE_APP_LINGUA_ROBOT_API_KEY=YOUR_API_KEY
+```
+Можете связаться со мной если у вас нет возможности получить новый API_KEY.
 
-## Type Support for `.vue` Imports in TS
+### UI 
+![English words page](./docs/images/ui-demonstration.png)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
@@ -43,4 +40,10 @@ npm run build
 
 ```sh
 npm run lint
+```
+
+### Format code with [Prettier](https://prettier.io/)
+
+```sh
+npm run format
 ```
