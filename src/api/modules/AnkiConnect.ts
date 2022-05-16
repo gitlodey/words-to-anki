@@ -20,11 +20,19 @@ export interface Image {
 }
 
 const ANKI_CONNECT_URL = "http://127.0.0.1:8765";
-const ANKI_DECK_NAME = "English 2022";
+const ANKI_DECK_NAME = "";
 
 class AnkiConnect {
+  private url: string;
+  private deckName: string;
+
+  constructor(url: string, deckName: string) {
+    this.url = url;
+    this.deckName = deckName;
+  }
+
   async invoke(action: string, version: number, params = {}) {
-    return await http.get(ANKI_CONNECT_URL, {
+    return await http.get(this.url, {
       method: "post",
       body: JSON.stringify({ action, version, params }),
       headers: { "Content-Type": "application/json" },
@@ -54,7 +62,7 @@ class AnkiConnect {
     }
     await this.invoke("addNote", 6, {
       note: {
-        deckName: ANKI_DECK_NAME,
+        deckName: this.deckName,
         modelName: "Basic",
         fields: {
           Front: word.word,
@@ -68,6 +76,18 @@ class AnkiConnect {
       },
     });
   }
+
+  getConnectSettings() {
+    return {
+      url: this.url,
+      deckName: this.deckName,
+    };
+  }
+
+  setConnectSettings(url: string, deckName: string) {
+    this.url = url;
+    this.deckName = deckName;
+  }
 }
 
-export default new AnkiConnect();
+export default new AnkiConnect(ANKI_CONNECT_URL, ANKI_DECK_NAME);

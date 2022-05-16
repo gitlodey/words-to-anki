@@ -1,6 +1,18 @@
 <template>
   <div>
     <h1>Add new English Words to your Anki</h1>
+    <v-btn
+      class="mb-4"
+      size="small"
+      @click="toggleSettingsForm"
+    >
+      Anki connect plugin settings
+    </v-btn>
+    <expansion-panel :open="settingsIsOpen">
+      <template #body>
+        <anki-connect-settings></anki-connect-settings>
+      </template>
+    </expansion-panel>
 
     <v-tabs
       v-model="selectedInputType"
@@ -86,12 +98,14 @@ import InputTypes from "@/types/InputTypes";
 import { computed, ref } from "vue";
 import { useEnglishWords } from "@/store/EnglishWords";
 import type EnglishWordCard from "@/types/EnglishWordCard";
+import AnkiConnectSettings from "@/components/AnkiConnectSettings.vue";
 
 const englishWordsStore = useEnglishWords();
 
 //data
 let selectedInputType = ref<InputTypes>(InputTypes.one);
 let allPanelsOpen = ref<boolean>(true);
+let settingsIsOpen = ref<boolean>(false);
 
 //computed
 let isSingleWordFormShow = computed(
@@ -111,6 +125,7 @@ const globalToggle = () => (allPanelsOpen.value = !allPanelsOpen.value);
 const deleteWord = (word: EnglishWordCard) => {
   englishWordsStore.deleteWord(word);
 };
+const toggleSettingsForm = () => (settingsIsOpen.value = !settingsIsOpen.value);
 </script>
 
 <style
