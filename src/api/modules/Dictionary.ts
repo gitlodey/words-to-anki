@@ -3,7 +3,7 @@ import type { DictionaryApiResponse } from "@/types/DictionaryApi";
 
 class Dictionary {
   readonly url: string = "https://api.dictionaryapi.dev/api/v2/entries/en/";
-  async getMeaning(word: string) {
+  async getWord(word: string) {
     const response = await fetch(`${this.url}${word}`);
     const body: DictionaryApiResponse[] | DictionaryApiError =
       await response.json();

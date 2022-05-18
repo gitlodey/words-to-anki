@@ -33,8 +33,10 @@ export const useEnglishWords = defineStore("EnglishWords", {
     },
     async findMeaning(word: string) {
       try {
-        const dictionaryApiResponse = await api.dictionary.getMeaning(word);
-        const linguaRobotResponse = await api.linguaRobot.getWord(word);
+        const [dictionaryApiResponse, linguaRobotResponse] = await Promise.all([
+          api.dictionary.getWord(word),
+          api.linguaRobot.getWord(word),
+        ]);
 
         return {
           dictionaryApiResponse,
