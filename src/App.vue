@@ -21,6 +21,14 @@
             🇹🇷
           </router-link>
         </p>
+        <p class="flag">
+          <router-link
+            activeClass="__active"
+            to="/list"
+          >
+            📃
+          </router-link>
+        </p>
       </v-navigation-drawer>
       <v-main>
         <v-container>

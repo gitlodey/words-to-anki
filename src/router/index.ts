@@ -1,5 +1,6 @@
 import EnglishWords from "../views/EnglishWords.vue";
 import TurkishWords from "@/views/TurkishWords.vue";
+import WordsList from "@/views/WordsList.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -14,6 +15,11 @@ const router = createRouter({
       path: "/tr",
       name: "Turkish",
       component: TurkishWords,
+    },
+    {
+      path: "/list",
+      name: "List",
+      component: WordsList,
     },
   ],
 });
